@@ -8,6 +8,7 @@ import {
   getTags,
 } from "@/lib/cms/store";
 import { buildMetadata } from "@/lib/seo/metadata";
+import PostImage from "@/components/PostImage";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -58,8 +59,8 @@ export default async function TagPage({ params }: Props) {
               href={`/blog/${p.slug}`}
               className="group p-5 rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all"
             >
-              <div className="h-32 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg flex items-center justify-center mb-4">
-                <BarChart3 className="w-8 h-8 text-primary/40" />
+              <div className="h-32 rounded-lg overflow-hidden bg-surface mb-4">
+                <PostImage post={p} variant="thumb" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-navy text-base leading-snug group-hover:text-primary transition-colors">
                 {p.title}

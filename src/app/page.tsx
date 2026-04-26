@@ -21,6 +21,7 @@ import {
   getTools,
 } from "@/lib/cms/store";
 import NewsletterForm from "@/components/NewsletterForm";
+import PostImage from "@/components/PostImage";
 import { organizationSchema, websiteSchema } from "@/lib/schema/jsonld";
 
 const topicIcons: Record<string, React.ReactNode> = {
@@ -68,6 +69,42 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-b from-surface to-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.06),transparent_50%)]" />
+        {/* Decorative chart SVG — sits behind the text, brand-on */}
+        <svg
+          aria-hidden
+          className="absolute right-0 top-0 h-full w-1/2 opacity-[0.06] pointer-events-none"
+          viewBox="0 0 800 600"
+          fill="none"
+          preserveAspectRatio="xMaxYMid slice"
+        >
+          <path
+            d="M0 480 L80 440 L160 460 L240 380 L320 410 L400 320 L480 290 L560 220 L640 240 L720 150 L800 100"
+            stroke="#3b82f6"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+          />
+          <path
+            d="M0 520 L80 490 L160 510 L240 470 L320 480 L400 420 L480 410 L560 360 L640 370 L720 310 L800 280"
+            stroke="#10b981"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+          />
+          {/* candlesticks */}
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => {
+            const x = 60 + i * 75;
+            const isUp = [0, 2, 3, 5, 7, 8, 9].includes(i);
+            const top = 200 + Math.sin(i * 1.3) * 40;
+            const bottom = 380 + Math.cos(i * 1.1) * 30;
+            return (
+              <g key={i}>
+                <line x1={x} y1={top - 30} x2={x} y2={bottom + 30} stroke={isUp ? "#10b981" : "#ef4444"} strokeWidth="2" />
+                <rect x={x - 10} y={isUp ? top : bottom - 50} width="20" height="50" fill={isUp ? "#10b981" : "#ef4444"} opacity="0.7" />
+              </g>
+            );
+          })}
+        </svg>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-24 sm:pt-28 sm:pb-32">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 text-sm font-medium text-primary bg-primary-light rounded-full">
@@ -125,11 +162,18 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
-              {featuredPosts.map((post) => (
+              {featuredPosts.map((post) => {
+                const cat = categories.find((c) => c.slug === post.categorySlug);
+                return (
                 <article key={post.slug} className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all">
-                  <div className="h-48 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                    <BarChart3 className="w-12 h-12 text-primary/40" />
-                  </div>
+                  <Link href={`/blog/${post.slug}`} className="block aspect-[1200/630] overflow-hidden bg-surface">
+                    <PostImage
+                      post={post}
+                      category={cat ? { name: cat.name } : undefined}
+                      variant="card"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </Link>
                   <div className="p-6">
                     <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium text-primary bg-primary-light rounded-full">
                       {post.format.replace("-", " ")}
@@ -140,7 +184,8 @@ export default async function HomePage() {
                     <p className="mt-2 text-sm text-muted line-clamp-2">{post.excerpt}</p>
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -253,21 +298,34 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
-              {trendingPosts.map((post) => (
+              {trendingPosts.map((post) => {
+                const cat = categories.find((c) => c.slug === post.categorySlug);
+                return (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group p-5 rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all"
+                  className="group rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all overflow-hidden"
                 >
-                  <span className="text-xs font-semibold text-primary uppercase tracking-wide">
-                    {post.format.replace("-", " ")}
-                  </span>
-                  <h3 className="mt-2 font-bold text-navy text-base leading-snug group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted line-clamp-2">{post.excerpt}</p>
+                  <div className="aspect-[1200/630] overflow-hidden bg-surface">
+                    <PostImage
+                      post={post}
+                      category={cat ? { name: cat.name } : undefined}
+                      variant="thumb"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                      {post.format.replace("-", " ")}
+                    </span>
+                    <h3 className="mt-2 font-bold text-navy text-base leading-snug group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted line-clamp-2">{post.excerpt}</p>
+                  </div>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

@@ -9,6 +9,7 @@ import {
 } from "@/lib/cms/store";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema/jsonld";
+import PostImage from "@/components/PostImage";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -89,9 +90,14 @@ export default async function CategoryPage({ params }: Props) {
               >
                 <Link
                   href={`/blog/${p.slug}`}
-                  className="block h-40 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center"
+                  className="block h-40 overflow-hidden bg-surface"
                 >
-                  <BarChart3 className="w-10 h-10 text-primary/40" />
+                  <PostImage
+                    post={p}
+                    category={{ name: cat.name }}
+                    variant="thumb"
+                    className="w-full h-full object-cover"
+                  />
                 </Link>
                 <div className="p-5">
                   <h3 className="font-bold text-navy text-base leading-snug group-hover:text-primary transition-colors">

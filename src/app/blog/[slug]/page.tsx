@@ -13,6 +13,8 @@ import {
 import { metadataForPost } from "@/lib/seo/metadata";
 import { buildPostSchemas } from "@/lib/schema/jsonld";
 import { BlockRenderer, buildToc } from "@/components/blocks/BlockRenderer";
+import PostImage from "@/components/PostImage";
+import Avatar from "@/components/Avatar";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -124,11 +126,21 @@ export default async function BlogPostPage({ params }: Props) {
           {post.subtitle && (
             <p className="mt-4 text-lg text-muted leading-relaxed">{post.subtitle}</p>
           )}
+          {/* Hero image — branded OG fallback if no custom image */}
+          <div className="mt-8 rounded-2xl overflow-hidden border border-border shadow-sm">
+            <PostImage
+              post={post}
+              category={category ? { name: category.name } : undefined}
+              variant="hero"
+              className="w-full h-auto"
+              priority
+            />
+          </div>
           <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted border-b border-border pb-6">
             {author && (
-              <span className="flex items-center gap-1.5">
-                <UserIcon className="w-4 h-4" />
-                {author.name}
+              <span className="flex items-center gap-2">
+                <Avatar name={author.name} src={author.avatar} size={28} />
+                <span className="font-medium text-navy">{author.name}</span>
               </span>
             )}
             {formattedDate && (
@@ -194,9 +206,7 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Author bio */}
         {author && author.bio && (
           <aside className="mt-10 p-6 bg-surface rounded-2xl border border-border flex gap-4">
-            <div className="shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-              {author.name.charAt(0)}
-            </div>
+            <Avatar name={author.name} src={author.avatar} size={48} />
             <div>
               <p className="font-semibold text-navy">{author.name}</p>
               {author.role && <p className="text-xs text-muted">{author.role}</p>}

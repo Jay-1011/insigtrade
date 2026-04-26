@@ -7,6 +7,7 @@ import {
   getTags,
 } from "@/lib/cms/store";
 import { buildMetadata } from "@/lib/seo/metadata";
+import PostImage from "@/components/PostImage";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
@@ -116,9 +117,14 @@ export default async function BlogPage({
                     >
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="shrink-0 w-full sm:w-56 h-40 bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl flex items-center justify-center"
+                        className="shrink-0 w-full sm:w-56 h-40 rounded-xl overflow-hidden bg-surface border border-border"
                       >
-                        <BarChart3 className="w-10 h-10 text-primary/40" />
+                        <PostImage
+                          post={post}
+                          category={cat ? { name: cat.name } : undefined}
+                          variant="thumb"
+                          className="w-full h-full object-cover"
+                        />
                       </Link>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-3 mb-2">
