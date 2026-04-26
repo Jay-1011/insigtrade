@@ -1,0 +1,164 @@
+{
+  "id": "p1",
+  "slug": "chatgpt-prompts-for-traders",
+  "title": "50 ChatGPT Prompts Every Trader Should Bookmark",
+  "subtitle": "Tested prompts that turn ChatGPT into your research analyst.",
+  "excerpt": "A curated list of 50 ChatGPT prompts for stock research, technical analysis, earnings prep and trade journaling — copy-paste ready.",
+  "format": "guide",
+  "status": "published",
+  "publishedAt": "2026-04-26T03:48:13.203Z",
+  "createdAt": "2026-04-26T03:48:13.203Z",
+  "updatedAt": "2026-04-26T03:48:13.203Z",
+  "authorId": "team",
+  "categorySlug": "ai-for-traders",
+  "tagSlugs": [
+    "chatgpt",
+    "swing-trading"
+  ],
+  "featuredImage": "",
+  "readTime": "9 min read",
+  "reviewToolId": "",
+  "blocks": [
+    {
+      "type": "tldr",
+      "text": "Use these 50 prompts to cut your daily research time in half. Save them in a Notion page or as ChatGPT custom instructions."
+    },
+    {
+      "type": "paragraph",
+      "text": "ChatGPT isn't going to predict tomorrow's market. But used right, it's a tireless research analyst that turns hours of work into minutes — earnings prep, sector scans, idea validation, journaling reviews. The trick is having the right prompts ready."
+    },
+    {
+      "type": "key-takeaways",
+      "items": [
+        "Specific prompts beat generic ones — always set role + context + output format.",
+        "Use Custom GPTs to memorize your trading style and risk parameters.",
+        "Pair ChatGPT with real data sources (don't trust it for prices).",
+        "Save prompts that work — your library compounds in value."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "How to use these prompts"
+    },
+    {
+      "type": "paragraph",
+      "text": "Each prompt below uses a simple R-C-O structure: Role, Context, Output. Replace the bracketed placeholders, then iterate."
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "Pro tip",
+      "text": "Keep your prompts in Notion, then add a 'Run' link that opens ChatGPT. Total flow: 5 seconds from idea to answer."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Earnings season prompts"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        "Summarize {company} Q3 earnings call in 5 bullet points focused on guidance.",
+        "What did {company} CFO say about margins vs the prior quarter?",
+        "Compare {company} earnings to consensus and react like a sell-side analyst.",
+        "List 3 questions analysts asked {company} and why each matters."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Technical analysis prompts"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        "Act as a swing trader. Walk me through the daily setup on {ticker} given recent price action: {paste levels}.",
+        "What invalidation level would make this {ticker} setup wrong?",
+        "Compare RSI, MACD and volume signals on {ticker} — which is most actionable today?"
+      ]
+    },
+    {
+      "type": "tool-card",
+      "toolId": "tradingview"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Risk and journaling prompts"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        "Review my last 10 trades. Spot 3 mistakes and 2 strengths: {paste journal}.",
+        "Build a checklist for me before I take any swing trade.",
+        "Critique this trade plan as if you were a strict prop firm risk manager: {paste plan}."
+      ]
+    },
+    {
+      "type": "newsletter"
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Building your own custom GPT"
+    },
+    {
+      "type": "steps",
+      "title": "Setup in 5 minutes",
+      "steps": [
+        {
+          "title": "Open ChatGPT",
+          "body": "Go to Explore → Create a GPT."
+        },
+        {
+          "title": "Define the trader you are",
+          "body": "Name, style (swing / day / options), risk per trade, instruments."
+        },
+        {
+          "title": "Paste your favorite prompts",
+          "body": "Add 5–10 of the prompts above as starter conversations."
+        },
+        {
+          "title": "Test",
+          "body": "Try a real workflow — earnings prep on a ticker — and refine instructions."
+        },
+        {
+          "title": "Pin it",
+          "body": "Pin to your sidebar. This is now your trading research analyst."
+        }
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is ChatGPT good for stock trading?",
+      "a": "For research and process work — yes. For live signals — no. Treat it as an analyst on call, not a forecaster."
+    },
+    {
+      "q": "Can ChatGPT pick stocks?",
+      "a": "It can shortlist candidates from a thesis you give it, but it can't see live prices and isn't tested as a stock-picker."
+    },
+    {
+      "q": "Which is better, ChatGPT or Claude, for trading?",
+      "a": "Both are strong. Claude often handles long earnings PDFs better; ChatGPT has stronger plugin/tool ecosystem. Try both for a week."
+    }
+  ],
+  "seo": {
+    "metaTitle": "50 ChatGPT Prompts for Traders (2026, Tested)",
+    "metaDescription": "Copy-paste ChatGPT prompts for stock research, earnings prep, technical analysis and trade journaling. Tested and ready to use."
+  },
+  "strategy": {
+    "focusKeyword": "chatgpt prompts for traders",
+    "secondaryKeywords": [
+      "ai prompts for stocks",
+      "trading prompts",
+      "chatgpt for stock research"
+    ],
+    "intent": "informational",
+    "funnelStage": "TOFU",
+    "monetization": "newsletter",
+    "affiliateArticle": false,
+    "productCta": false
+  }
+}

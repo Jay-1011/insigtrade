@@ -1,0 +1,17 @@
+{
+  "slug": "ai-for-traders",
+  "name": "AI for Traders",
+  "description": "How to use AI tools to analyze markets, screen stocks and make smarter decisions.",
+  "seoTitle": "AI for Traders — Tools, Prompts & Strategies | Insigtrade",
+  "seoDescription": "Hands-on guides on using ChatGPT, Claude and AI tools for stock research, technical analysis and trading workflows.",
+  "faqs": [
+    {
+      "q": "Can AI predict the stock market?",
+      "a": "No. AI is a research multiplier, not a crystal ball. It dramatically speeds up analysis but doesn't predict price."
+    },
+    {
+      "q": "Is ChatGPT good for trading?",
+      "a": "For research, idea generation and earnings prep — yes. For live signals — no. Use it as an analyst on call, not an oracle."
+    }
+  ]
+}
