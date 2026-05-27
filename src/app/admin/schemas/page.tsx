@@ -55,7 +55,7 @@ export default async function AdminSchemasPage() {
                 <input name="orgContactType" defaultValue={cfg.organization.contactPoint?.contactType ?? "customer support"} className="input" />
               </Field>
             </div>
-            <Field label="Social profiles (sameAs — one URL per line)" className="mt-3">
+            <Field label="Social profiles (sameAs, one URL per line)" className="mt-3">
               <textarea
                 name="orgSameAs"
                 defaultValue={cfg.organization.sameAs.join("\n")}

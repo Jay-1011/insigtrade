@@ -129,7 +129,7 @@ export const blogPosts = [
     slug: "building-your-first-trading-system",
     title: "Building Your First Automated Trading System (No-Code Guide)",
     excerpt:
-      "Learn how to build a simple rule-based trading system using free AI tools — no programming required.",
+      "Learn how to build a simple rule-based trading system using free AI tools, no programming required.",
     category: "Trading Systems",
     date: "2025-04-03",
     readTime: "10 min read",
@@ -192,7 +192,7 @@ export const benefits = [
   {
     title: "Save Hours of Research",
     description:
-      "AI tools can scan thousands of stocks, news, and data points in seconds — work that would take you hours manually.",
+      "AI tools can scan thousands of stocks, news, and data points in seconds, work that would take you hours manually.",
     icon: "clock",
   },
   {

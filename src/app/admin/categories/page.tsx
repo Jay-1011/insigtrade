@@ -36,7 +36,7 @@ export default async function AdminCategoriesPage() {
             <div key={c.slug} className="flex items-center justify-between p-4">
               <div>
                 <p className="font-semibold text-navy">{c.name}</p>
-                <p className="text-xs text-muted">{c.slug} — {c.description}</p>
+                <p className="text-xs text-muted">{c.slug}, {c.description}</p>
               </div>
               <form action={deleteCategoryAction}>
                 <input type="hidden" name="slug" value={c.slug} />

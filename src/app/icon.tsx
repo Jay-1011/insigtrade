@@ -1,4 +1,4 @@
-// Branded favicon — generated at build time. Next.js wires this in automatically.
+// Branded favicon, generated at build time. Next.js wires this in automatically.
 import { ImageResponse } from "next/og";
 
 export const size = { width: 32, height: 32 };

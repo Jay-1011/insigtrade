@@ -129,7 +129,7 @@ export default function ContactPage() {
               <MessageSquare className="w-6 h-6 text-primary mb-3" />
               <h3 className="font-semibold text-navy mb-1">Response Time</h3>
               <p className="text-sm text-muted">
-                We typically respond within 24–48 hours.
+                We typically respond within 24-48 hours.
               </p>
             </div>
             <div className="bg-navy rounded-xl p-6 text-white">

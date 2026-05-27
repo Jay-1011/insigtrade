@@ -1,7 +1,7 @@
 // Default OG image for the homepage + any route without its own opengraph-image.
 import { ImageResponse } from "next/og";
 
-export const alt = "Insigtrade — AI & Automation for Smarter Trading";
+export const alt = "Insigtrade: AI & Automation for Smarter Trading";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const runtime = "edge";

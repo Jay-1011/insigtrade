@@ -242,7 +242,7 @@ export default function PostEditor({ post, categories, tags, tools, onSubmit }: 
         <div className="grid sm:grid-cols-3 gap-4">
           <Field label="Category">
             <select name="categorySlug" value={categorySlug} onChange={(e) => setCategorySlug(e.target.value)} className="input">
-              <option value="">— select —</option>
+              <option value="">- select -</option>
               {categories.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
             </select>
           </Field>
@@ -264,7 +264,7 @@ export default function PostEditor({ post, categories, tags, tools, onSubmit }: 
         {format === "tool-review" && (
           <Field label="Review Tool">
             <select name="reviewToolId" value={reviewToolId} onChange={(e) => setReviewToolId(e.target.value)} className="input">
-              <option value="">— select tool —</option>
+              <option value="">- select tool -</option>
               {tools.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
           </Field>
@@ -356,10 +356,10 @@ export default function PostEditor({ post, categories, tags, tools, onSubmit }: 
           {tab === "seo" && (
             <div className="space-y-4">
               <Field label="Meta Title">
-                <input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} className="input" placeholder="60–70 chars" />
+                <input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} className="input" placeholder="60-70 chars" />
               </Field>
               <Field label="Meta Description">
-                <textarea value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} className="input" rows={2} placeholder="150–160 chars" />
+                <textarea value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} className="input" rows={2} placeholder="150-160 chars" />
               </Field>
               <Field label="Canonical URL">
                 <input value={canonical} onChange={(e) => setCanonical(e.target.value)} className="input" />
@@ -457,7 +457,7 @@ export default function PostEditor({ post, categories, tags, tools, onSubmit }: 
                   Manually set if you want Google to show stars under search results.
                 </p>
                 <div className="grid grid-cols-2 gap-3">
-                  <Field label="Rating value (0–5)">
+                  <Field label="Rating value (0-5)">
                     <input type="number" step="0.1" min="0" max="5" value={ratingValue}
                       onChange={(e) => setRatingValue(e.target.value === "" ? "" : Number(e.target.value))}
                       className="input" />
@@ -638,7 +638,7 @@ function BlockEditor({
       )}
       {block.type === "tool-card" && (
         <select className="input" value={block.toolId} onChange={(e) => onChange({ ...block, toolId: e.target.value })}>
-          <option value="">— select tool —</option>
+          <option value="">- select tool -</option>
           {tools.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
         </select>
       )}

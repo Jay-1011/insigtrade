@@ -19,7 +19,7 @@ export default async function KeywordsPage({
 
   const banner =
     sp.imported || sp.skipped
-      ? `Imported ${sp.imported ?? 0} keyword(s)${sp.skipped ? ` — skipped ${sp.skipped} duplicate(s)` : ""}.`
+      ? `Imported ${sp.imported ?? 0} keyword(s)${sp.skipped ? `, skipped ${sp.skipped} duplicate(s)` : ""}.`
       : null;
 
   return (

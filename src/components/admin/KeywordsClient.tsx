@@ -192,10 +192,10 @@ function KeywordRow({ k }: { k: Keyword }) {
           <p className="text-xs text-primary mt-0.5">→ /blog/{k.linkedPostSlug}</p>
         )}
       </td>
-      <td className="px-3 py-2 text-xs text-muted">{k.volume ?? "—"}</td>
-      <td className="px-3 py-2 text-xs text-muted">{k.difficulty ?? "—"}</td>
-      <td className="px-3 py-2 text-xs text-muted">{k.intent ?? "—"}</td>
-      <td className="px-3 py-2 text-xs text-muted">{k.cluster ?? "—"}</td>
+      <td className="px-3 py-2 text-xs text-muted">{k.volume ?? "-"}</td>
+      <td className="px-3 py-2 text-xs text-muted">{k.difficulty ?? "-"}</td>
+      <td className="px-3 py-2 text-xs text-muted">{k.intent ?? "-"}</td>
+      <td className="px-3 py-2 text-xs text-muted">{k.cluster ?? "-"}</td>
       <td className="px-3 py-2">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusColor[k.status]}`}>
           {k.status}
@@ -345,7 +345,7 @@ function SuggestModal({
               <div className="grid sm:grid-cols-3 gap-3">
                 <Field label="Cluster (optional)">
                   <select name="cluster" className="input" defaultValue="">
-                    <option value="">— any —</option>
+                    <option value="">- any -</option>
                     {categories.map((c) => (
                       <option key={c.slug} value={c.slug}>{c.name}</option>
                     ))}
@@ -353,7 +353,7 @@ function SuggestModal({
                 </Field>
                 <Field label="Preferred intent (optional)">
                   <select name="intent" className="input" defaultValue="">
-                    <option value="">— any —</option>
+                    <option value="">- any -</option>
                     {["informational", "commercial", "comparison", "transactional"].map((v) => <option key={v}>{v}</option>)}
                   </select>
                 </Field>
@@ -545,7 +545,7 @@ function ImportModal({
               onChange={(e) => setDefaultCluster(e.target.value)}
               className="input"
             >
-              <option value="">— let CSV decide —</option>
+              <option value="">- let CSV decide -</option>
               {categories.map((c) => (
                 <option key={c.slug} value={c.slug}>{c.name}</option>
               ))}

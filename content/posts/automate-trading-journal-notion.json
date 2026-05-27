@@ -65,7 +65,7 @@
       "type": "callout",
       "variant": "tip",
       "title": "Free for most retail traders",
-      "text": "Make.com free tier handles 1,000 ops/month — easily enough for active swing traders."
+      "text": "Make.com free tier handles 1,000 ops/month, easily enough for active swing traders."
     },
     {
       "type": "heading",
@@ -103,7 +103,7 @@
   "faqs": [
     {
       "q": "Do I need to know how to code?",
-      "a": "No. Make.com is fully visual. The hardest step is reading Notion's API page — about 10 minutes."
+      "a": "No. Make.com is fully visual. The hardest step is reading Notion's API page, about 10 minutes."
     },
     {
       "q": "Will this work with my broker?",

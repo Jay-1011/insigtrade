@@ -11,7 +11,7 @@ import PostImage from "@/components/PostImage";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
-    title: "Blog — AI, Automation & Trading Workflows",
+    title: "Blog: AI, Automation & Trading Workflows",
     description:
       "In-depth guides on AI tools, trading automation, productivity systems and market research workflows for self-directed traders.",
     path: "/blog",
@@ -97,7 +97,7 @@ export default async function BlogPage({
             {posts.length === 0 ? (
               <div className="p-10 rounded-xl border border-dashed border-border text-center">
                 <p className="text-muted">
-                  No posts yet. Check back soon — new guides coming weekly.
+                  No posts yet. Check back soon, new guides coming weekly.
                 </p>
                 <Link
                   href="/blog"

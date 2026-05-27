@@ -28,7 +28,7 @@ const upcomingProducts = [
     icon: <Workflow className="w-7 h-7" />,
     title: "Automated Research Workflows",
     description:
-      "Pre-built automation templates that connect AI tools to your trading workflow — from news monitoring to position sizing.",
+      "Pre-built automation templates that connect AI tools to your trading workflow, from news monitoring to position sizing.",
     status: "In Development",
   },
   {
@@ -59,7 +59,7 @@ export default function ProductsPage() {
             </h1>
             <p className="mt-4 text-lg text-muted leading-relaxed">
               Premium digital products to accelerate your AI-powered trading
-              journey. Templates, playbooks, and automation systems —
+              journey. Templates, playbooks, and automation systems -
               launching soon.
             </p>
           </div>

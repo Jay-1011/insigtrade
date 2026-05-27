@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────────────
-// Insigtrade CMS — Core Types
+// Insigtrade CMS, Core Types
 // File-based CMS. All entities live as JSON files under /content.
 // ──────────────────────────────────────────────────────────
 
@@ -236,7 +236,7 @@ export interface CtaBlock {
 // Schema management
 // ──────────────────────────────────────────────────────────
 
-/** Global JSON-LD config — managed at /admin/schemas */
+/** Global JSON-LD config, managed at /admin/schemas */
 export interface SchemaConfig {
   organization: {
     name: string;

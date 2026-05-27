@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
-    title: "Tool Reviews — AI & Trading Tools Tested",
+    title: "Tool Reviews: AI & Trading Tools Tested",
     description:
       "Honest, hands-on reviews of AI and automation tools for traders. Pricing, features, pros, cons and verdicts.",
     path: "/reviews",
@@ -32,7 +32,7 @@ export default async function ReviewsPage() {
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         {tools.length === 0 ? (
-          <p className="text-center text-muted py-12">No reviews yet — coming soon.</p>
+          <p className="text-center text-muted py-12">No reviews yet, coming soon.</p>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tools.map((tool) => (

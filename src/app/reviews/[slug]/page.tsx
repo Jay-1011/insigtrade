@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tool = await getToolBySlug(slug);
   if (!tool) return { title: "Not Found" };
   return buildMetadata({
-    title: `${tool.name} Review — ${tool.tagline}`,
+    title: `${tool.name} Review, ${tool.tagline}`,
     description: tool.description,
     path: `/reviews/${tool.slug}`,
   });
@@ -165,7 +165,7 @@ export default async function ToolReviewPage({ params }: Props) {
 
         <p className="mt-10 text-xs text-muted border-t border-border pt-4">
           <strong>Disclosure:</strong> This page may contain affiliate links. We
-          earn a small commission if you sign up — at no extra cost to you.
+          earn a small commission if you sign up, at no extra cost to you.
         </p>
       </article>
     </>

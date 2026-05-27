@@ -33,8 +33,8 @@ const topicIcons: Record<string, React.ReactNode> = {
 };
 
 const benefits = [
-  { icon: <Clock className="w-6 h-6" />, title: "Save Hours of Research", body: "AI scans thousands of stocks, news and data points in seconds — work that took you hours." },
-  { icon: <Brain className="w-6 h-6" />, title: "Remove Emotional Bias", body: "Automated systems run your strategy consistently — without fear or greed in the loop." },
+  { icon: <Clock className="w-6 h-6" />, title: "Save Hours of Research", body: "AI scans thousands of stocks, news and data points in seconds, work that took you hours." },
+  { icon: <Brain className="w-6 h-6" />, title: "Remove Emotional Bias", body: "Automated systems run your strategy consistently, without fear or greed in the loop." },
   { icon: <Target className="w-6 h-6" />, title: "Spot Opportunities Faster", body: "Pattern recognition and sentiment AI surface set-ups before the crowd notices." },
   { icon: <ShieldCheck className="w-6 h-6" />, title: "Manage Risk Smarter", body: "AI-powered position sizing and drawdown alerts protect your capital in volatile tape." },
 ];
@@ -69,7 +69,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-b from-surface to-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.06),transparent_50%)]" />
-        {/* Decorative chart SVG — sits behind the text, brand-on */}
+        {/* Decorative chart SVG, sits behind the text, brand-on */}
         <svg
           aria-hidden
           className="absolute right-0 top-0 h-full w-1/2 opacity-[0.06] pointer-events-none"
@@ -199,7 +199,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-navy">Tools We Recommend</h2>
               <p className="mt-3 text-lg text-muted max-w-2xl mx-auto">
                 Hand-tested AI and automation tools that deliver measurable
-                value — not hype.
+                value, not hype.
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -242,7 +242,7 @@ export default async function HomePage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold text-navy">Topics We Cover</h2>
               <p className="mt-3 text-lg text-muted max-w-2xl mx-auto">
-                Five core clusters — built to take you from beginner to systems-driven trader.
+                Five core clusters, built to take you from beginner to systems-driven trader.
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -343,7 +343,7 @@ export default async function HomePage() {
                 <div key={t.id} className="p-6 bg-white rounded-2xl border border-border">
                   <p className="text-base italic text-slate-700">&ldquo;{t.quote}&rdquo;</p>
                   <p className="mt-4 text-sm font-semibold text-navy">
-                    — {t.author}
+                   , {t.author}
                     {t.role && <span className="text-muted font-normal">, {t.role}</span>}
                   </p>
                 </div>
@@ -358,7 +358,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-2xl px-4 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold">Ready to Trade Smarter?</h2>
           <p className="mt-4 text-lg text-white/60 leading-relaxed">
-            Join thousands of traders getting weekly automation tips and market insights — completely free.
+            Join thousands of traders getting weekly automation tips and market insights, completely free.
           </p>
           <div className="mt-8">
             <NewsletterForm variant="dark" />

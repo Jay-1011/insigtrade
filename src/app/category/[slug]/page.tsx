@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cat = await getCategoryBySlug(slug);
   if (!cat) return { title: "Not Found" };
   return buildMetadata({
-    title: cat.seoTitle ?? `${cat.name} — Insigtrade`,
+    title: cat.seoTitle ?? `${cat.name}: Insigtrade`,
     description: cat.seoDescription ?? cat.description,
     path: `/category/${cat.slug}`,
   });

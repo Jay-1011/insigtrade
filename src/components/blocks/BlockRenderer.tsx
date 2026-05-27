@@ -79,7 +79,7 @@ export function BlockRenderer({
           <p className="text-lg leading-relaxed">&ldquo;{block.text}&rdquo;</p>
           {block.cite && (
             <cite className="mt-2 block text-sm not-italic text-muted">
-              — {block.cite}
+             , {block.cite}
             </cite>
           )}
         </blockquote>
@@ -373,7 +373,7 @@ export function BlockRenderer({
         <div className="my-8 p-6 rounded-xl bg-surface border border-border">
           <p className="text-base italic text-slate-700">&ldquo;{block.quote}&rdquo;</p>
           <p className="mt-3 text-sm font-semibold text-navy">
-            — {block.author}
+           , {block.author}
             {block.role && <span className="text-muted font-normal">, {block.role}</span>}
           </p>
         </div>

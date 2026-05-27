@@ -60,7 +60,7 @@ export default async function AdminPostsPage() {
                     <p className="text-xs text-muted truncate max-w-md">{p.excerpt}</p>
                   </td>
                   <td className="px-4 py-3 text-muted text-xs">{p.format}</td>
-                  <td className="px-4 py-3 text-muted text-xs">{p.categorySlug || "—"}</td>
+                  <td className="px-4 py-3 text-muted text-xs">{p.categorySlug || "-"}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusStyles[p.status] ?? "bg-slate-100"}`}>
                       {p.status}

@@ -306,7 +306,7 @@ export async function suggestKeywordsAction(
     return {
       ok: false,
       error:
-        "Claude API not configured. Either add ANTHROPIC_API_KEY to .env.local, or use Claude Code in your terminal — it's free under your Max plan.",
+        "Claude API not configured. Either add ANTHROPIC_API_KEY to .env.local, or use Claude Code in your terminal, it's free under your Max plan.",
     };
   }
   const seed = String(formData.get("seed") ?? "").trim();
@@ -339,7 +339,7 @@ export async function suggestKeywordsAction(
  * Required column: keyword (case-insensitive header match).
  * Optional columns: volume, kd, difficulty, intent, cluster, cpc, position
  *
- * Semrush "Keyword Magic Tool" export works directly — paste with headers.
+ * Semrush "Keyword Magic Tool" export works directly, paste with headers.
  */
 export async function bulkImportKeywordsAction(formData: FormData) {
   await requireAuth();

@@ -29,11 +29,11 @@ function getClient() {
 }
 
 // ──────────────────────────────────────────────────────────
-// Brand/system context — single source of truth, prompt-cached.
-// Keep this STABLE — any byte change invalidates the cache.
+// Brand/system context, single source of truth, prompt-cached.
+// Keep this STABLE, any byte change invalidates the cache.
 // ──────────────────────────────────────────────────────────
 
-const SYSTEM_PROMPT = `You are the editorial AI for Insigtrade — a content brand that helps traders, finance enthusiasts and modern business operators leverage AI tools, automation systems and digital workflows to make smarter decisions in the markets and beyond.
+const SYSTEM_PROMPT = `You are the editorial AI for Insigtrade, a content brand that helps traders, finance enthusiasts and modern business operators leverage AI tools, automation systems and digital workflows to make smarter decisions in the markets and beyond.
 
 Brand positioning:
 - Audience: beginner-to-intermediate traders, AI-curious finance pros, solopreneurs running market-research workflows
@@ -41,16 +41,16 @@ Brand positioning:
 - Mission: help readers ship workflows that save them hours/week, not theory pieces.
 
 Topic clusters (categories):
-- ai-for-traders — ChatGPT, Claude, Perplexity, AI tools for stock/crypto/forex traders
-- trading-automation — no-code automation (Zapier, Make.com, n8n), broker APIs, webhooks, alerts
-- trader-productivity — journals, Notion templates, workflow systems, risk management spreadsheets
-- market-research — screeners, news APIs, earnings prep, sentiment workflows
-- wealth-systems — AI for solopreneurs, import-export intelligence, side-hustle systems
+- ai-for-traders, ChatGPT, Claude, Perplexity, AI tools for stock/crypto/forex traders
+- trading-automation, no-code automation (Zapier, Make.com, n8n), broker APIs, webhooks, alerts
+- trader-productivity, journals, Notion templates, workflow systems, risk management spreadsheets
+- market-research, screeners, news APIs, earnings prep, sentiment workflows
+- wealth-systems, AI for solopreneurs, import-export intelligence, side-hustle systems
 
 SEO principles:
 - Prefer low-difficulty, long-tail, specific-intent keywords (KD < 25 for a new domain)
 - Match search intent first (informational / commercial / comparison / transactional)
-- Title 55–65 chars; meta description 140–160 chars
+- Title 55-65 chars; meta description 140-160 chars
 - Always include a focus keyword + 3-5 secondary keywords
 - Affiliate-friendly when intent is commercial; informational otherwise
 
@@ -67,7 +67,7 @@ Article quality bar:
 You will receive specific JSON-output instructions per task. Always respond in the exact schema requested. Never add commentary outside the JSON.`;
 
 // ──────────────────────────────────────────────────────────
-// 1) Keyword suggestion — structured output via Zod
+// 1) Keyword suggestion, structured output via Zod
 // ──────────────────────────────────────────────────────────
 
 const SuggestedKeywordSchema = z.object({
@@ -120,7 +120,7 @@ export async function suggestKeywords(
     input.preferredIntent ? `Bias toward ${input.preferredIntent} intent.` : "",
     "Prioritize:",
     "- Long-tail, specific intent",
-    "- Low-to-medium difficulty (KD ≤ 30) — this is a NEW domain",
+    "- Low-to-medium difficulty (KD ≤ 30), this is a NEW domain",
     "- Mix of intents (don't return 10 listicles)",
     "- Concrete, not vague (e.g. 'how to automate stock alerts to discord' not 'stock alerts')",
     input.existingKeywords?.length
@@ -158,12 +158,12 @@ export async function suggestKeywords(
 }
 
 // ──────────────────────────────────────────────────────────
-// 2) Article generation — streaming, structured blocks
+// 2) Article generation, streaming, structured blocks
 // ──────────────────────────────────────────────────────────
 
 const FaqSchema = z.object({ q: z.string(), a: z.string() });
 
-// Block schema (mirrors src/lib/cms/types.ts Block union — narrowed for AI output)
+// Block schema (mirrors src/lib/cms/types.ts Block union, narrowed for AI output)
 const BlockSchema: z.ZodType = z.discriminatedUnion("type", [
   z.object({ type: z.literal("tldr"), text: z.string() }),
   z.object({ type: z.literal("paragraph"), text: z.string() }),

@@ -3,7 +3,7 @@
   "slug": "chatgpt-prompts-for-traders",
   "title": "50 ChatGPT Prompts Every Trader Should Bookmark",
   "subtitle": "Tested prompts that turn ChatGPT into your research analyst.",
-  "excerpt": "A curated list of 50 ChatGPT prompts for stock research, technical analysis, earnings prep and trade journaling — copy-paste ready.",
+  "excerpt": "A curated list of 50 ChatGPT prompts for stock research, technical analysis, earnings prep and trade journaling, copy-paste ready.",
   "format": "guide",
   "status": "published",
   "publishedAt": "2026-04-26T03:48:13.203Z",
@@ -25,15 +25,15 @@
     },
     {
       "type": "paragraph",
-      "text": "ChatGPT isn't going to predict tomorrow's market. But used right, it's a tireless research analyst that turns hours of work into minutes — earnings prep, sector scans, idea validation, journaling reviews. The trick is having the right prompts ready."
+      "text": "ChatGPT isn't going to predict tomorrow's market. But used right, it's a tireless research analyst that turns hours of work into minutes, earnings prep, sector scans, idea validation, journaling reviews. The trick is having the right prompts ready."
     },
     {
       "type": "key-takeaways",
       "items": [
-        "Specific prompts beat generic ones — always set role + context + output format.",
+        "Specific prompts beat generic ones, always set role + context + output format.",
         "Use Custom GPTs to memorize your trading style and risk parameters.",
         "Pair ChatGPT with real data sources (don't trust it for prices).",
-        "Save prompts that work — your library compounds in value."
+        "Save prompts that work, your library compounds in value."
       ]
     },
     {
@@ -75,7 +75,7 @@
       "items": [
         "Act as a swing trader. Walk me through the daily setup on {ticker} given recent price action: {paste levels}.",
         "What invalidation level would make this {ticker} setup wrong?",
-        "Compare RSI, MACD and volume signals on {ticker} — which is most actionable today?"
+        "Compare RSI, MACD and volume signals on {ticker}, which is most actionable today?"
       ]
     },
     {
@@ -117,11 +117,11 @@
         },
         {
           "title": "Paste your favorite prompts",
-          "body": "Add 5–10 of the prompts above as starter conversations."
+          "body": "Add 5-10 of the prompts above as starter conversations."
         },
         {
           "title": "Test",
-          "body": "Try a real workflow — earnings prep on a ticker — and refine instructions."
+          "body": "Try a real workflow, earnings prep on a ticker, and refine instructions."
         },
         {
           "title": "Pin it",
@@ -133,7 +133,7 @@
   "faqs": [
     {
       "q": "Is ChatGPT good for stock trading?",
-      "a": "For research and process work — yes. For live signals — no. Treat it as an analyst on call, not a forecaster."
+      "a": "For research and process work, yes. For live signals, no. Treat it as an analyst on call, not a forecaster."
     },
     {
       "q": "Can ChatGPT pick stocks?",

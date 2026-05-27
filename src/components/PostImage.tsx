@@ -11,7 +11,7 @@ interface Props {
   className?: string;
   category?: { name: string };
   priority?: boolean;
-  /** Visual size — affects the rendered <img> width param sent to OG. */
+  /** Visual size, affects the rendered <img> width param sent to OG. */
   variant?: "card" | "hero" | "thumb";
 }
 
@@ -37,7 +37,7 @@ export default function PostImage({
 
   const alt =
     post.featuredImageAlt ??
-    `${post.title} — Insigtrade ${post.format.replace("-", " ")}`;
+    `${post.title}: Insigtrade ${post.format.replace("-", " ")}`;
 
   return (
     /* eslint-disable-next-line @next/next/no-img-element */

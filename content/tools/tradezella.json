@@ -3,7 +3,7 @@
   "slug": "tradezella",
   "name": "TradeZella",
   "tagline": "The trading journal traders are actually choosing in 2026.",
-  "description": "TradeZella is the modern trading journal that took the title from Tradervue. Auto-imports trades from 30+ brokers, tags by setup, surfaces your real edge with playbook analytics, and ships fast — new features land monthly. The cleanest UX in the journal space.",
+  "description": "TradeZella is the modern trading journal that took the title from Tradervue. Auto-imports trades from 30+ brokers, tags by setup, surfaces your real edge with playbook analytics, and ships fast, new features land monthly. The cleanest UX in the journal space.",
   "category": "Journal",
   "website": "https://tradezella.com",
   "affiliateUrl": "https://tradezella.com/?via=insigtrade",
@@ -13,20 +13,20 @@
     "Auto-import from 30+ brokers (IBKR, TastyTrade, Robinhood, Webull, etc.)",
     "Setup-based playbook analytics (find your edge per strategy)",
     "Risk metrics: drawdown, win rate by setup, R-multiple distribution",
-    "Replay tool — chart your trades on the original setup",
+    "Replay tool, chart your trades on the original setup",
     "Daily AI journal recap (new in 2026)",
     "Mobile app + browser",
     "Note-taking + screenshot attachments per trade"
   ],
   "pros": [
-    "Modern, fast UI — feels like a 2026 product",
+    "Modern, fast UI, feels like a 2026 product",
     "Best-in-class broker integrations",
     "Playbook analytics genuinely surface your edge",
-    "Active development — new features ship monthly",
+    "Active development, new features ship monthly",
     "Mobile app actually works for journal review on the go"
   ],
   "cons": [
-    "Mid-tier pricing — Tradervue's free plan is more generous for casual traders",
+    "Mid-tier pricing, Tradervue's free plan is more generous for casual traders",
     "Steeper learning curve than Tradervue if you just want simple P&L tracking",
     "Some advanced filters require the higher Premium tier"
   ],

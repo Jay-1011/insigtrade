@@ -126,7 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
           {post.subtitle && (
             <p className="mt-4 text-lg text-muted leading-relaxed">{post.subtitle}</p>
           )}
-          {/* Hero image — branded OG fallback if no custom image */}
+          {/* Hero image, branded OG fallback if no custom image */}
           <div className="mt-8 rounded-2xl overflow-hidden border border-border shadow-sm">
             <PostImage
               post={post}

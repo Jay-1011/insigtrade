@@ -28,7 +28,7 @@ export default async function Image({
   params: { slug: string };
 }) {
   const post = await getPostBySlug(params.slug);
-  const title = post?.title ?? "Insigtrade — AI & Automation for Smarter Trading";
+  const title = post?.title ?? "Insigtrade: AI & Automation for Smarter Trading";
   const formatLabel = post ? FORMAT_LABELS[post.format] ?? "" : "";
   const category = post
     ? (await getCategoryBySlug(post.categorySlug))?.name ?? "Insigtrade"

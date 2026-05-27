@@ -2,7 +2,7 @@
   "slug": "ai-for-traders",
   "name": "AI for Traders",
   "description": "How to use AI tools to analyze markets, screen stocks and make smarter decisions.",
-  "seoTitle": "AI for Traders — Tools, Prompts & Strategies | Insigtrade",
+  "seoTitle": "AI for Traders: Tools, Prompts & Strategies | Insigtrade",
   "seoDescription": "Hands-on guides on using ChatGPT, Claude and AI tools for stock research, technical analysis and trading workflows.",
   "faqs": [
     {
@@ -11,7 +11,7 @@
     },
     {
       "q": "Is ChatGPT good for trading?",
-      "a": "For research, idea generation and earnings prep — yes. For live signals — no. Use it as an analyst on call, not an oracle."
+      "a": "For research, idea generation and earnings prep, yes. For live signals, no. Use it as an analyst on call, not an oracle."
     }
   ]
 }

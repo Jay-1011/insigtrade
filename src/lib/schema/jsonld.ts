@@ -387,12 +387,12 @@ export function validatePostSchemas(post: Post): string[] {
   if (!post.publishedAt && post.status === "published") warnings.push("Published post missing publishedAt date");
   if (!post.featuredImage) warnings.push("No featured image (BlogPosting.image recommended for rich results)");
   if (post.format === "tool-review" && !post.reviewToolId)
-    warnings.push("Format is 'tool-review' but no tool is linked — Review schema will be skipped");
+    warnings.push("Format is 'tool-review' but no tool is linked, Review schema will be skipped");
   for (const b of post.blocks) {
     if (b.type === "how-to" && (!b.name || !b.steps?.length))
-      warnings.push("HowTo block missing name or steps — HowTo schema will be skipped");
+      warnings.push("HowTo block missing name or steps, HowTo schema will be skipped");
     if (b.type === "video" && b.url && !b.title)
-      warnings.push("Video block missing title — VideoObject schema will be skipped");
+      warnings.push("Video block missing title, VideoObject schema will be skipped");
   }
   return warnings;
 }

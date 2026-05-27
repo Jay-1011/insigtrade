@@ -22,7 +22,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Insigtrade — Use AI & Automation to Trade Smarter",
+    default: "Insigtrade: Use AI & Automation to Trade Smarter",
     template: "%s | Insigtrade",
   },
   description:
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Insigtrade",
-    title: "Insigtrade — Use AI & Automation to Trade Smarter",
+    title: "Insigtrade: Use AI & Automation to Trade Smarter",
     description:
       "Discover the best AI tools, automation strategies, and trading systems to improve your decision-making and efficiency in the markets.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Insigtrade — Use AI & Automation to Trade Smarter",
+    title: "Insigtrade: Use AI & Automation to Trade Smarter",
     description:
       "Discover the best AI tools, automation strategies, and trading systems.",
   },

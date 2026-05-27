@@ -25,7 +25,7 @@ export default function AboutPage() {
               About Insigtrade
             </h1>
             <p className="mt-4 text-lg text-muted leading-relaxed">
-              Helping traders navigate the AI revolution in finance — one tool,
+              Helping traders navigate the AI revolution in finance, one tool,
               one guide, one strategy at a time.
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function AboutPage() {
                 icon: <Target className="w-6 h-6" />,
                 title: "Actionable Strategies",
                 description:
-                  "Every guide is built around concrete steps you can apply to your trading workflow today — no fluff, no hype.",
+                  "Every guide is built around concrete steps you can apply to your trading workflow today, no fluff, no hype.",
               },
               {
                 icon: <TrendingUp className="w-6 h-6" />,
@@ -119,7 +119,7 @@ export default function AboutPage() {
               </p>
               <p>
                 After discovering how AI tools could transform trading
-                workflows, I started documenting everything — which tools
+                workflows, I started documenting everything, which tools
                 worked, which didn&apos;t, and how to get the most out of
                 them. That documentation became this website.
               </p>

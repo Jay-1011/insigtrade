@@ -13,7 +13,7 @@ import {
 import { isLoggedIn, logout } from "@/lib/cms/auth";
 
 export const metadata = {
-  title: "Admin — Insigtrade",
+  title: "Admin: Insigtrade",
   robots: { index: false, follow: false },
 };
 

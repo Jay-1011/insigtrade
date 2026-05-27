@@ -1,4 +1,4 @@
-// Apple touch icon — used when users add the site to iOS home screen.
+// Apple touch icon, used when users add the site to iOS home screen.
 import { ImageResponse } from "next/og";
 
 export const size = { width: 180, height: 180 };

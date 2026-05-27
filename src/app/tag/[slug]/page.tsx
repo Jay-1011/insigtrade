@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = await getTagBySlug(slug);
   if (!tag) return { title: "Not Found" };
   return buildMetadata({
-    title: `${tag.name} — Articles`,
+    title: `${tag.name}: Articles`,
     description: tag.description ?? `Articles tagged with ${tag.name}`,
     path: `/tag/${tag.slug}`,
   });
