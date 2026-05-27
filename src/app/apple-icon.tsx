@@ -12,25 +12,57 @@ export default function AppleIcon() {
         style={{
           width: "100%",
           height: "100%",
-          background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+          background: "linear-gradient(135deg, #0b1220 0%, #1e3a8a 60%, #2563eb 100%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
         }}
       >
+        {/* Upward trend line, cyan accent */}
         <svg
-          width="110"
-          height="110"
-          viewBox="0 0 24 24"
+          width="180"
+          height="180"
+          viewBox="0 0 32 32"
           fill="none"
-          stroke="white"
-          strokeWidth="2.5"
+          stroke="#22d3ee"
+          strokeWidth="1.8"
           strokeLinecap="round"
           strokeLinejoin="round"
+          style={{ position: "absolute", inset: 0, opacity: 0.85 }}
         >
-          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-          <polyline points="16 7 22 7 22 13" />
+          <polyline points="3 22 11 14 16 18 27 6" />
         </svg>
+        {/* Monogram 'i' */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            zIndex: 1,
+            transform: "translateY(4px)",
+          }}
+        >
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: 999,
+              background: "#ffffff",
+              marginBottom: 10,
+            }}
+          />
+          <div
+            style={{
+              width: 22,
+              height: 68,
+              borderRadius: 8,
+              background: "#ffffff",
+            }}
+          />
+        </div>
       </div>
     ),
     { ...size }
