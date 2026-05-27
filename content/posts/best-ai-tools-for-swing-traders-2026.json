@@ -143,5 +143,7 @@
     "monetization": "affiliate",
     "affiliateArticle": true,
     "productCta": false
-  }
+  },
+  "featuredImage": "/blog/best-ai-tools-for-swing-traders-2026.jpg",
+  "featuredImageAlt": "Glowing neural network brain overlaid on faded candlestick chart skyline"
 }

@@ -15,7 +15,7 @@
     "chatgpt",
     "swing-trading"
   ],
-  "featuredImage": "",
+  "featuredImage": "/blog/chatgpt-prompts-for-traders.jpg",
   "readTime": "9 min read",
   "reviewToolId": "",
   "blocks": [
@@ -160,5 +160,6 @@
     "monetization": "newsletter",
     "affiliateArticle": false,
     "productCta": false
-  }
+  },
+  "featuredImageAlt": "Holographic chat bubbles and geometric shapes connected to an abstract rising stock chart"
 }

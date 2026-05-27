@@ -130,5 +130,7 @@
     "monetization": "newsletter",
     "affiliateArticle": false,
     "productCta": true
-  }
+  },
+  "featuredImage": "/blog/automate-trading-journal-notion.jpg",
+  "featuredImageAlt": "Floating dashboard panels and data ribbons above a minimalist desk, premium fintech aesthetic"
 }

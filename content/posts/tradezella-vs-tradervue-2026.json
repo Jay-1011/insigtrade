@@ -11,94 +11,310 @@
   "updatedAt": "2026-04-26T00:00:00.000Z",
   "authorId": "team",
   "categorySlug": "trader-productivity",
-  "tagSlugs": ["swing-trading"],
+  "tagSlugs": [
+    "swing-trading"
+  ],
   "readTime": "9 min read",
   "blocks": [
-    { "type": "tldr", "text": "Pick TradeZella if you trade actively (5+/week) and want to find your edge through data. Pick Tradervue if you trade casually and want a free tier or you're allergic to monthly subscriptions." },
-    { "type": "paragraph", "text": "If you've been searching for a trading journal in 2026, you've probably narrowed it to TradeZella vs Tradervue. They're the two most-mentioned, most-recommended, most-reviewed options. Both work. But they're built for different traders, and the reviews you'll find online are mostly written by affiliates who didn't actually compare them side-by-side." },
-    { "type": "paragraph", "text": "I used Tradervue for 4 years. Then spent 30 days using TradeZella with the same trading book, same trades, same setups, same broker (IBKR + TastyTrade). What I'm about to share is what I actually noticed, not what either company's marketing says." },
-    { "type": "key-takeaways", "items": [
-      "Mobile experience is night-and-day, TradeZella has a real iOS app, Tradervue is a responsive web wrapper",
-      "Setup-based analytics, both have them, but TradeZella surfaces them, Tradervue hides them",
-      "Free tier, Tradervue wins clearly. TradeZella has only a 7-day trial",
-      "Speed, TradeZella is noticeably faster (200ms vs 3s for filtering 200 trades)",
-      "Development pace, TradeZella ships features monthly; Tradervue ships quarterly at best"
-    ]},
-    { "type": "heading", "level": 2, "text": "At a glance" },
-    { "type": "table", "headers": ["", "TradeZella", "Tradervue"],
-      "rows": [
-        ["Best for", "Active traders, finding edge via data", "Casual traders, free tier"],
-        ["Pricing", "$29/mo annual / $39/mo", "Free / $29/mo / $49/mo"],
-        ["Free tier", "❌ 7-day trial only", "✅ Up to 100 trades/month"],
-        ["Brokers supported", "30+ (IBKR, TastyTrade, Robinhood, crypto)", "20+ (US-focused)"],
-        ["Mobile app", "✅ Native iOS + Android", "Responsive web only"],
-        ["Setup analytics surfacing", "✅ Front-and-center", "Hidden in filters"],
-        ["UI design", "Modern (2024+)", "Dated (2018-era)"],
-        ["Replay tool", "✅ Excellent", "Basic"],
-        ["AI journal recap (2026)", "✅ Built-in", "❌ Not yet"],
-        ["Development velocity", "Monthly", "Quarterly at best"],
-        ["Founded", "2022", "2012"]
+    {
+      "type": "tldr",
+      "text": "Pick TradeZella if you trade actively (5+/week) and want to find your edge through data. Pick Tradervue if you trade casually and want a free tier or you're allergic to monthly subscriptions."
+    },
+    {
+      "type": "paragraph",
+      "text": "If you've been searching for a trading journal in 2026, you've probably narrowed it to TradeZella vs Tradervue. They're the two most-mentioned, most-recommended, most-reviewed options. Both work. But they're built for different traders, and the reviews you'll find online are mostly written by affiliates who didn't actually compare them side-by-side."
+    },
+    {
+      "type": "paragraph",
+      "text": "I used Tradervue for 4 years. Then spent 30 days using TradeZella with the same trading book, same trades, same setups, same broker (IBKR + TastyTrade). What I'm about to share is what I actually noticed, not what either company's marketing says."
+    },
+    {
+      "type": "key-takeaways",
+      "items": [
+        "Mobile experience is night-and-day, TradeZella has a real iOS app, Tradervue is a responsive web wrapper",
+        "Setup-based analytics, both have them, but TradeZella surfaces them, Tradervue hides them",
+        "Free tier, Tradervue wins clearly. TradeZella has only a 7-day trial",
+        "Speed, TradeZella is noticeably faster (200ms vs 3s for filtering 200 trades)",
+        "Development pace, TradeZella ships features monthly; Tradervue ships quarterly at best"
       ]
     },
-    { "type": "heading", "level": 2, "text": "Where TradeZella wins" },
-    { "type": "heading", "level": 3, "text": "1. The mobile experience" },
-    { "type": "paragraph", "text": "I review my trades after the close while making dinner, usually on my phone. With Tradervue, I'd open the mobile site, wait for it to render, fight with date filters that didn't tap-target well, and give up. With TradeZella's iOS app, I open it, swipe through today's trades, attach a screenshot from photo roll, jot a one-line lesson, done. It's the difference between actually maintaining a journal and abandoning it after 3 weeks." },
-    { "type": "heading", "level": 3, "text": "2. Setup-based analytics surfacing" },
-    { "type": "paragraph", "text": "Both products store the same data. Both let you tag trades by setup. The difference is what they show you when you open the app." },
-    { "type": "paragraph", "text": "TradeZella's home screen shows expectancy per setup, win rate per setup, average R per setup, front and center, no clicks. After 30 trades I could see: my pullback-after-breakout setup was profitable. My fade-the-gap setup was losing me money despite 'feeling like' it was working. I cut the loser. That insight alone paid for 6 months of subscription." },
-    { "type": "paragraph", "text": "Tradervue has the same data. To get to it, you click into Reports → Tag Performance → filter by date range → wait for the chart. I never did this in 4 years of using Tradervue because it required active investigation. TradeZella surfaces the insight without me asking." },
-    { "type": "heading", "level": 3, "text": "3. Speed" },
-    { "type": "paragraph", "text": "Filtering 200 trades by setup + date range: TradeZella ~200ms. Tradervue ~3 seconds with a UI freeze. This sounds like a small thing until you do it 20 times in a review session. By the end I was avoiding Tradervue because using it felt like a chore." },
-    { "type": "heading", "level": 3, "text": "4. Modern features ship monthly" },
-    { "type": "paragraph", "text": "In Q1 2026 alone, TradeZella shipped: AI journal recap (summarizes your week of trades), broker-direct integration with TastyTrade (no more CSV uploads), and a setups marketplace where you can copy strategies from other users. Tradervue's last meaningful update was a UI refresh six months ago." },
-    { "type": "heading", "level": 2, "text": "Where Tradervue wins" },
-    { "type": "heading", "level": 3, "text": "1. The free tier is genuinely useful" },
-    { "type": "paragraph", "text": "Tradervue free gives you 100 trades/month, full analytics, all the basics. If you trade 2-3x/week, that's all you need indefinitely. TradeZella has no free tier, only a 7-day trial. For someone genuinely cost-sensitive, this is a big difference." },
-    { "type": "heading", "level": 3, "text": "2. Battle-tested" },
-    { "type": "paragraph", "text": "Tradervue has run for 12 years. Your data is safer there in the sense that the company is highly unlikely to disappear. TradeZella started in 2022, funded, growing, but younger. If long-term data preservation matters, Tradervue has the longer track record." },
-    { "type": "heading", "level": 3, "text": "3. Simpler if you don't want analytics" },
-    { "type": "paragraph", "text": "If you just want to log trades and see your P&L curve, no setup tagging, no playbook analysis, no AI features, Tradervue is simpler. TradeZella's depth becomes overhead if you don't use it." },
-    { "type": "heading", "level": 2, "text": "Pricing, actual cost over a year" },
-    { "type": "table", "headers": ["Plan", "TradeZella", "Tradervue"],
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "At a glance"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "",
+        "TradeZella",
+        "Tradervue"
+      ],
       "rows": [
-        ["Free", "$0 (7-day trial only)", "$0/mo (100 trades/month)"],
-        ["Standard annual", "$29/mo = $348/yr", "$29/mo = $348/yr"],
-        ["Premium / Pro", "$69/mo = $828/yr", "$49/mo = $588/yr"]
+        [
+          "Best for",
+          "Active traders, finding edge via data",
+          "Casual traders, free tier"
+        ],
+        [
+          "Pricing",
+          "$29/mo annual / $39/mo",
+          "Free / $29/mo / $49/mo"
+        ],
+        [
+          "Free tier",
+          "❌ 7-day trial only",
+          "✅ Up to 100 trades/month"
+        ],
+        [
+          "Brokers supported",
+          "30+ (IBKR, TastyTrade, Robinhood, crypto)",
+          "20+ (US-focused)"
+        ],
+        [
+          "Mobile app",
+          "✅ Native iOS + Android",
+          "Responsive web only"
+        ],
+        [
+          "Setup analytics surfacing",
+          "✅ Front-and-center",
+          "Hidden in filters"
+        ],
+        [
+          "UI design",
+          "Modern (2024+)",
+          "Dated (2018-era)"
+        ],
+        [
+          "Replay tool",
+          "✅ Excellent",
+          "Basic"
+        ],
+        [
+          "AI journal recap (2026)",
+          "✅ Built-in",
+          "❌ Not yet"
+        ],
+        [
+          "Development velocity",
+          "Monthly",
+          "Quarterly at best"
+        ],
+        [
+          "Founded",
+          "2022",
+          "2012"
+        ]
       ]
     },
-    { "type": "callout", "variant": "info", "title": "Cost-of-trade calculator", "text": "If you trade 5x/week (260 trades/year), TradeZella Standard = $1.34/trade. Tradervue Standard = $1.34/trade. Same. The price is identical, pick on features, not cost." },
-    { "type": "heading", "level": 2, "text": "Final verdict" },
-    { "type": "paragraph", "text": "Pick TradeZella if any of these are true:" },
-    { "type": "checklist", "items": [
-      "You trade 5+ times per week",
-      "You want to find your edge through data, not feel",
-      "You review trades on mobile",
-      "You care about your tools feeling fast and modern",
-      "You want a journal that's still actively improving in 2027 and 2028"
-    ]},
-    { "type": "paragraph", "text": "Pick Tradervue if any of these are true:" },
-    { "type": "checklist", "items": [
-      "You're cost-sensitive, Tradervue's free tier covers you",
-      "You trade 1-3x per week, casually",
-      "You trust 12-year-old products over 4-year-old products",
-      "You don't want or need playbook analytics",
-      "You're already on Tradervue and not actively frustrated"
-    ]},
-    { "type": "callout", "variant": "tip", "title": "My actual recommendation", "text": "If you're starting fresh in 2026, TradeZella. The product is just better for active use, and the price is identical. If you're a happy Tradervue user, stay. There's no reason to switch unless you're hitting one of the friction points above." },
-    { "type": "internal-links", "title": "Related reading", "links": [
-      { "label": "Best trading journal software (5 tested for 30 days)", "href": "/blog/best-trading-journal-software-2026" },
-      { "label": "Honest TradeZella review (30-day test)", "href": "/blog/tradezella-review" },
-      { "label": "How to automate your trading journal in Notion (free option)", "href": "/blog/automate-trading-journal-notion" }
-    ]},
-    { "type": "cta", "title": "Try TradeZella (7-day free trial)", "text": "Test it during a week you're trading actively, the analytics need real data to shine.", "ctaLabel": "Start free trial", "ctaHref": "https://tradezella.com/?via=insigtrade", "variant": "primary" },
-    { "type": "newsletter" }
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Where TradeZella wins"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "1. The mobile experience"
+    },
+    {
+      "type": "paragraph",
+      "text": "I review my trades after the close while making dinner, usually on my phone. With Tradervue, I'd open the mobile site, wait for it to render, fight with date filters that didn't tap-target well, and give up. With TradeZella's iOS app, I open it, swipe through today's trades, attach a screenshot from photo roll, jot a one-line lesson, done. It's the difference between actually maintaining a journal and abandoning it after 3 weeks."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "2. Setup-based analytics surfacing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Both products store the same data. Both let you tag trades by setup. The difference is what they show you when you open the app."
+    },
+    {
+      "type": "paragraph",
+      "text": "TradeZella's home screen shows expectancy per setup, win rate per setup, average R per setup, front and center, no clicks. After 30 trades I could see: my pullback-after-breakout setup was profitable. My fade-the-gap setup was losing me money despite 'feeling like' it was working. I cut the loser. That insight alone paid for 6 months of subscription."
+    },
+    {
+      "type": "paragraph",
+      "text": "Tradervue has the same data. To get to it, you click into Reports → Tag Performance → filter by date range → wait for the chart. I never did this in 4 years of using Tradervue because it required active investigation. TradeZella surfaces the insight without me asking."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "3. Speed"
+    },
+    {
+      "type": "paragraph",
+      "text": "Filtering 200 trades by setup + date range: TradeZella ~200ms. Tradervue ~3 seconds with a UI freeze. This sounds like a small thing until you do it 20 times in a review session. By the end I was avoiding Tradervue because using it felt like a chore."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "4. Modern features ship monthly"
+    },
+    {
+      "type": "paragraph",
+      "text": "In Q1 2026 alone, TradeZella shipped: AI journal recap (summarizes your week of trades), broker-direct integration with TastyTrade (no more CSV uploads), and a setups marketplace where you can copy strategies from other users. Tradervue's last meaningful update was a UI refresh six months ago."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Where Tradervue wins"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "1. The free tier is genuinely useful"
+    },
+    {
+      "type": "paragraph",
+      "text": "Tradervue free gives you 100 trades/month, full analytics, all the basics. If you trade 2-3x/week, that's all you need indefinitely. TradeZella has no free tier, only a 7-day trial. For someone genuinely cost-sensitive, this is a big difference."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "2. Battle-tested"
+    },
+    {
+      "type": "paragraph",
+      "text": "Tradervue has run for 12 years. Your data is safer there in the sense that the company is highly unlikely to disappear. TradeZella started in 2022, funded, growing, but younger. If long-term data preservation matters, Tradervue has the longer track record."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "3. Simpler if you don't want analytics"
+    },
+    {
+      "type": "paragraph",
+      "text": "If you just want to log trades and see your P&L curve, no setup tagging, no playbook analysis, no AI features, Tradervue is simpler. TradeZella's depth becomes overhead if you don't use it."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Pricing, actual cost over a year"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Plan",
+        "TradeZella",
+        "Tradervue"
+      ],
+      "rows": [
+        [
+          "Free",
+          "$0 (7-day trial only)",
+          "$0/mo (100 trades/month)"
+        ],
+        [
+          "Standard annual",
+          "$29/mo = $348/yr",
+          "$29/mo = $348/yr"
+        ],
+        [
+          "Premium / Pro",
+          "$69/mo = $828/yr",
+          "$49/mo = $588/yr"
+        ]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "info",
+      "title": "Cost-of-trade calculator",
+      "text": "If you trade 5x/week (260 trades/year), TradeZella Standard = $1.34/trade. Tradervue Standard = $1.34/trade. Same. The price is identical, pick on features, not cost."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Final verdict"
+    },
+    {
+      "type": "paragraph",
+      "text": "Pick TradeZella if any of these are true:"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        "You trade 5+ times per week",
+        "You want to find your edge through data, not feel",
+        "You review trades on mobile",
+        "You care about your tools feeling fast and modern",
+        "You want a journal that's still actively improving in 2027 and 2028"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Pick Tradervue if any of these are true:"
+    },
+    {
+      "type": "checklist",
+      "items": [
+        "You're cost-sensitive, Tradervue's free tier covers you",
+        "You trade 1-3x per week, casually",
+        "You trust 12-year-old products over 4-year-old products",
+        "You don't want or need playbook analytics",
+        "You're already on Tradervue and not actively frustrated"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "My actual recommendation",
+      "text": "If you're starting fresh in 2026, TradeZella. The product is just better for active use, and the price is identical. If you're a happy Tradervue user, stay. There's no reason to switch unless you're hitting one of the friction points above."
+    },
+    {
+      "type": "internal-links",
+      "title": "Related reading",
+      "links": [
+        {
+          "label": "Best trading journal software (5 tested for 30 days)",
+          "href": "/blog/best-trading-journal-software-2026"
+        },
+        {
+          "label": "Honest TradeZella review (30-day test)",
+          "href": "/blog/tradezella-review"
+        },
+        {
+          "label": "How to automate your trading journal in Notion (free option)",
+          "href": "/blog/automate-trading-journal-notion"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "Try TradeZella (7-day free trial)",
+      "text": "Test it during a week you're trading actively, the analytics need real data to shine.",
+      "ctaLabel": "Start free trial",
+      "ctaHref": "https://tradezella.com/?via=insigtrade",
+      "variant": "primary"
+    },
+    {
+      "type": "newsletter"
+    }
   ],
   "faqs": [
-    { "q": "Is TradeZella better than Tradervue?", "a": "For active traders (5+ trades/week), yes. Better mobile, better analytics surfacing, faster, ships features monthly. For casual traders or anyone who needs a free tier, Tradervue still wins." },
-    { "q": "Can I migrate my Tradervue data to TradeZella?", "a": "Yes. Export from Tradervue (Settings → Export → CSV), then import into TradeZella's Add Trades flow. All trade data + tags transfer cleanly. Notes attach as text per trade." },
-    { "q": "Do TradeZella and Tradervue cost the same?", "a": "Yes, both standard plans are $29/mo. TradeZella has no free tier (7-day trial only). Tradervue's free tier covers up to 100 trades/month, which can be enough if you trade casually." },
-    { "q": "Which one supports more brokers?", "a": "TradeZella, 30+ brokers including more crypto exchanges. Tradervue covers ~20 brokers, US-focused. If you trade outside the US or trade crypto, TradeZella's edge here is real." },
-    { "q": "Should I switch from Tradervue if I'm already happy with it?", "a": "Probably not. The migration friction (re-learning a UI, re-tagging recent trades) isn't worth it unless you're hitting specific frustrations, bad mobile, slow filtering, or wishing you had better analytics. If Tradervue is working, stay." }
+    {
+      "q": "Is TradeZella better than Tradervue?",
+      "a": "For active traders (5+ trades/week), yes. Better mobile, better analytics surfacing, faster, ships features monthly. For casual traders or anyone who needs a free tier, Tradervue still wins."
+    },
+    {
+      "q": "Can I migrate my Tradervue data to TradeZella?",
+      "a": "Yes. Export from Tradervue (Settings → Export → CSV), then import into TradeZella's Add Trades flow. All trade data + tags transfer cleanly. Notes attach as text per trade."
+    },
+    {
+      "q": "Do TradeZella and Tradervue cost the same?",
+      "a": "Yes, both standard plans are $29/mo. TradeZella has no free tier (7-day trial only). Tradervue's free tier covers up to 100 trades/month, which can be enough if you trade casually."
+    },
+    {
+      "q": "Which one supports more brokers?",
+      "a": "TradeZella, 30+ brokers including more crypto exchanges. Tradervue covers ~20 brokers, US-focused. If you trade outside the US or trade crypto, TradeZella's edge here is real."
+    },
+    {
+      "q": "Should I switch from Tradervue if I'm already happy with it?",
+      "a": "Probably not. The migration friction (re-learning a UI, re-tagging recent trades) isn't worth it unless you're hitting specific frustrations, bad mobile, slow filtering, or wishing you had better analytics. If Tradervue is working, stay."
+    }
   ],
   "seo": {
     "metaTitle": "TradeZella vs Tradervue 2026: Which Trading Journal Wins?",
@@ -118,5 +334,7 @@
     "affiliateArticle": true,
     "productCta": false
   },
-  "reviewToolId": ""
+  "reviewToolId": "",
+  "featuredImage": "/blog/tradezella-vs-tradervue-2026.jpg",
+  "featuredImageAlt": "Two glowing holographic analytics panels facing each other in blue and amber comparison"
 }
