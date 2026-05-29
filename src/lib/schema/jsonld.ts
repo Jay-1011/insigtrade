@@ -97,6 +97,16 @@ export function blogPostingSchema(
   const ov = post.schemaOverrides?.blogPosting;
   const useArticleType = post.schemaOverrides?.emit?.article === true;
 
+  // Image fallback chain:
+  //   1. schema override
+  //   2. post.featuredImage
+  //   3. per-post dynamic OG image (/blog/<slug>/opengraph-image)
+  // Google needs an image URL to grant rich-result eligibility.
+  const imageUrl =
+    ov?.image ??
+    post.featuredImage ??
+    absoluteUrl(`/blog/${post.slug}/opengraph-image`);
+
   return clean({
     "@context": "https://schema.org",
     "@type":
@@ -107,19 +117,21 @@ export function blogPostingSchema(
         : "BlogPosting",
     headline: ov?.headline ?? post.title,
     description: ov?.description ?? post.excerpt,
-    image: (ov?.image ?? post.featuredImage)
-      ? absoluteUrl(ov?.image ?? post.featuredImage!)
-      : undefined,
+    image: absoluteUrl(imageUrl),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     author: author
       ? {
           "@type": "Person",
           name: author.name,
-          url: author.slug ? absoluteUrl(`/author/${author.slug}`) : undefined,
+          url: author.slug ? absoluteUrl(`/author/${author.slug}`) : absoluteUrl("/about"),
         }
       : cfg?.defaultAuthor
-      ? { "@type": "Person", name: cfg.defaultAuthor.name }
+      ? {
+          "@type": "Person",
+          name: cfg.defaultAuthor.name,
+          url: cfg.defaultAuthor.url ?? absoluteUrl("/about"),
+        }
       : undefined,
     publisher: {
       "@type": "Organization",
