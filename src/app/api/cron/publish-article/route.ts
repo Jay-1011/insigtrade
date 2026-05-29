@@ -21,6 +21,15 @@ interface PublishBody {
   article: GeneratedArticle;
   status?: "published" | "draft" | "scheduled";
   scheduled_for?: string;
+  /**
+   * Optional hero image URL the routine generated (Higgsfield CDN URL).
+   * The endpoint downloads it server-side, uploads to Supabase Storage,
+   * and sets the post.featuredImage to the stable public Storage URL.
+   * Without this, the post falls back to the dynamic OG image (which
+   * has text), which looks like a placeholder in blog lists.
+   */
+  image_url?: string;
+  image_alt?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -125,6 +134,24 @@ export async function POST(req: NextRequest) {
   };
 
   const slug = slugifyStr(a.title);
+
+  // If the routine generated a hero image, mirror it into our own Supabase
+  // Storage bucket so we own the asset and the URL is stable. Falls back
+  // to undefined (=> dynamic OG image) if the mirror step fails.
+  let heroImageUrl: string | undefined;
+  let heroImageAlt: string | undefined;
+  if (body.image_url) {
+    try {
+      heroImageUrl = await mirrorImageToStorage(body.image_url, slug);
+      heroImageAlt =
+        body.image_alt ??
+        `Abstract editorial illustration related to ${a.title}`;
+    } catch (e) {
+      console.error("[cron] image mirror failed:", (e as Error).message);
+      // Don't fail the publish over an image issue; OG fallback covers it.
+    }
+  }
+
   const post = articleToPost({
     article: a,
     slug,
@@ -137,6 +164,10 @@ export async function POST(req: NextRequest) {
     intent: keyword.intent,
     funnelStage: keyword.funnelStage,
   });
+  if (heroImageUrl) {
+    post.featuredImage = heroImageUrl;
+    post.featuredImageAlt = heroImageAlt;
+  }
 
   try {
     await savePost(post);
@@ -165,7 +196,46 @@ export async function POST(req: NextRequest) {
     title: a.title,
     wordCount,
     keyword_id: body.keyword_id,
+    featured_image: heroImageUrl ?? null,
   });
+}
+
+/**
+ * Download a remote image URL and re-upload it to the public 'blog' bucket
+ * in Supabase Storage. Returns the stable public Storage URL on success.
+ * Caller wraps in try/catch — never throws to the API consumer.
+ */
+async function mirrorImageToStorage(
+  sourceUrl: string,
+  slug: string
+): Promise<string> {
+  if (!/^https?:\/\//i.test(sourceUrl)) {
+    throw new Error("image_url must be http(s)");
+  }
+  const res = await fetch(sourceUrl);
+  if (!res.ok) throw new Error(`fetch image: HTTP ${res.status}`);
+  const contentType = res.headers.get("content-type") ?? "image/jpeg";
+  // We accept png/jpeg/webp from the upstream and normalize the storage
+  // extension based on the response content-type.
+  let ext = "jpg";
+  if (contentType.includes("png")) ext = "png";
+  else if (contentType.includes("webp")) ext = "webp";
+
+  const buf = new Uint8Array(await res.arrayBuffer());
+  const objectPath = `${slug}.${ext}`;
+
+  const { error: upErr } = await db()
+    .storage.from("blog")
+    .upload(objectPath, buf, {
+      contentType,
+      upsert: true,
+      cacheControl: "31536000", // 1y, the slug is unique per post
+    });
+  if (upErr) throw new Error(`storage upload: ${upErr.message}`);
+
+  const { data: pub } = db().storage.from("blog").getPublicUrl(objectPath);
+  if (!pub?.publicUrl) throw new Error("could not resolve public URL");
+  return pub.publicUrl;
 }
 
 // ── helpers ──────────────────────────────────────────────────
