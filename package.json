@@ -7,10 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "node scripts/seed.mjs",
-    "generate": "node scripts/generate-articles.mjs",
-    "publish-scheduled": "node scripts/publish-scheduled.mjs",
-    "build:full": "node scripts/publish-scheduled.mjs && next build"
+    "db:migrate-json": "node scripts/migrate-json-to-supabase.mjs",
+    "db:upload-images": "node scripts/upload-images-to-supabase-storage.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

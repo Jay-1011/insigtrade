@@ -1,6 +1,7 @@
 // ──────────────────────────────────────────────────────────
 // Insigtrade CMS, Core Types
-// File-based CMS. All entities live as JSON files under /content.
+// Backed by Supabase Postgres (see supabase/migrations/0001_init.sql).
+// Data access lives in src/lib/cms/store.ts.
 // ──────────────────────────────────────────────────────────
 
 export type PostStatus = "draft" | "published" | "scheduled";
