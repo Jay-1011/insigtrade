@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.insigtrade.daily</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>__ROUTINE_DIR__/runner.sh</string>
+    <string>daily</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__ROUTINE_DIR__</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key>
+    <string>__HOME__</string>
+  </dict>
+
+  <!-- Fires at 09:00 and 17:00 in the system local timezone (IST on this Mac). -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Hour</key><integer>9</integer>
+      <key>Minute</key><integer>0</integer>
+    </dict>
+    <dict>
+      <key>Hour</key><integer>17</integer>
+      <key>Minute</key><integer>0</integer>
+    </dict>
+  </array>
+
+  <!-- Don't fire on launchctl load; only on schedule. -->
+  <key>RunAtLoad</key>
+  <false/>
+
+  <!-- If the Mac was asleep at fire time, run as soon as it wakes (within reason). -->
+  <key>StartCalendarIntervalIgnoreMissed</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>__ROUTINE_DIR__/logs/daily.launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__ROUTINE_DIR__/logs/daily.launchd.err.log</string>
+</dict>
+</plist>

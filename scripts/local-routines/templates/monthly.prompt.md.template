@@ -1,0 +1,69 @@
+You are the monthly content audit routine for Insigtrade. On the 1st of every month, pull last 30 days of performance data, feed wins back into the keyword queue, and flag losers.
+
+Auth header for all writes:
+  Authorization: Bearer __CRON_SECRET__
+
+Use Bash + curl. Do NOT call supabase.co directly.
+
+## Step 0 — ensure we have enough data to audit
+
+  curl -sS -H 'Authorization: Bearer __CRON_SECRET__' 'https://insigtrade.com/api/cron/queue-status'
+
+If posts.publishedOlderThan14d < 20, reply "insufficient data, only N posts older than 14 days; audit will be more useful next month" and exit cleanly.
+
+## Step 1 — pull performance data
+
+If you have GSC + Ahrefs MCPs available, use them:
+- mcp__*__gsc_get_top_pages, gsc_get_top_queries, gsc_get_query_movers
+- mcp__*__site-explorer-top-pages, rank-tracker-overview, keywords-explorer-related-terms
+
+Pull last 30 days for insigtrade.com:
+- GSC top 50 pages by impressions (with CTR + avg position)
+- GSC top 50 queries by clicks
+- Ahrefs top pages by organic traffic
+- Rank-tracker overview if a project exists
+
+If MCPs aren't available, fall back to reading the published posts list via /api/cron/list-posts and make qualitative judgments based on title/topic.
+
+## Step 2 — classify
+
+For each published post (cross-reference GSC pages with post slugs):
+
+WINNERS (>= 100 impressions in 30 days):
+- Use Ahrefs related-terms to find 3-5 sibling keywords
+- Filter: KD<=25, volume 100-5000, not already in keywords table
+- Stage them for INSERT as status='idea', priority='high'
+
+STRIKING DISTANCE (queries ranking position 11-25):
+- These pages need a refresh post deepening the same topic
+- Stage as status='idea', priority='high', suggested_title noting 'Refresh:' angle
+
+LOSERS (>= 500 impressions, 0 clicks, post is 30+ days old):
+- Title/snippet is the problem
+- Stage their associated keyword for PATCH status='update'
+
+## Step 3 — INSERT new keywords (batched)
+
+  curl -sS -X POST 'https://insigtrade.com/api/cron/insert-keywords' \
+    -H 'Authorization: Bearer __CRON_SECRET__' \
+    -H 'Content-Type: application/json' \
+    -d "$(jq -n --argjson kws "$(cat /tmp/new_keywords.json)" '{keywords: $kws}')"
+
+## Step 4 — PATCH loser keywords
+
+For each loser keyword text:
+
+  curl -sS -X PATCH 'https://insigtrade.com/api/cron/update-keyword' \
+    -H 'Authorization: Bearer __CRON_SECRET__' \
+    -H 'Content-Type: application/json' \
+    -d '{"keyword":"<the keyword text>", "status":"update"}'
+
+## Step 5 — report (under 500 words)
+
+Wins (top 5): post slug, impressions, clicks, avg position. What's working.
+Striking distance (top 5): queries at position 11-25 with their pages. Refresh angle.
+Losers (top 5): pages with 500+ impressions, 0 clicks. Suggested rewrite.
+Pipeline impact: new high-priority keywords added, losers flagged.
+Health check: total published posts, queue depth, on track for monthly volume target?
+
+Keep it factual. No fluff. Meant to be skimmed in 3 minutes.
