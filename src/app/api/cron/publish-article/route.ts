@@ -88,13 +88,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Validate the keyword's cluster against the real categories table.
+  // The routine sometimes shortens slugs (e.g. "automation" instead of
+  // "trading-automation"), which violates the posts.category_slug FK.
+  // We coerce common aliases to the canonical slug, and 422 on a true miss.
+  const rawCluster = (kwRow.cluster as string | null) ?? "";
+  const canonicalCluster = await resolveCategorySlug(rawCluster);
+  if (rawCluster && !canonicalCluster) {
+    const { data: cats } = await db().from("categories").select("slug");
+    return Response.json(
+      {
+        error: `category_slug "${rawCluster}" not found in categories table`,
+        hint:
+          "Update the keyword's cluster to one of the valid category slugs, " +
+          "then re-publish.",
+        validCategories: (cats ?? []).map((c) => c.slug),
+      },
+      { status: 422 }
+    );
+  }
+
   const keyword: Keyword = {
     id: kwRow.id,
     keyword: kwRow.keyword,
     volume: kwRow.volume ?? undefined,
     difficulty: kwRow.difficulty ?? undefined,
     intent: kwRow.intent ?? undefined,
-    cluster: kwRow.cluster ?? undefined,
+    cluster: canonicalCluster ?? undefined,
     funnelStage: kwRow.funnel_stage ?? undefined,
     priority: kwRow.priority ?? undefined,
     suggestedTitle: kwRow.suggested_title ?? undefined,
@@ -213,5 +233,43 @@ function scanForAiTells(a: GeneratedArticle): string | null {
   const haystack = JSON.stringify(a).toLowerCase();
   for (const d of BANNED_DASHES) if (haystack.includes(d)) return `dash: ${d}`;
   for (const p of BANNED_PHRASES) if (haystack.includes(p)) return `phrase: ${p}`;
+  return null;
+}
+
+// Known aliases the routine occasionally produces; map them to the
+// canonical slug used in the categories table. Extend if we see new
+// drifts in routine output.
+const CLUSTER_ALIASES: Record<string, string> = {
+  automation: "trading-automation",
+  productivity: "trader-productivity",
+  research: "market-research",
+  wealth: "wealth-systems",
+  ai: "ai-for-traders",
+  trading: "trading-automation",
+};
+
+/** Map a raw cluster value to a real category slug, or null if not found. */
+async function resolveCategorySlug(raw: string): Promise<string | null> {
+  if (!raw) return null;
+  const lower = raw.toLowerCase().trim();
+
+  // First try exact match against real categories
+  const { data: exact } = await db()
+    .from("categories")
+    .select("slug")
+    .eq("slug", lower)
+    .maybeSingle();
+  if (exact?.slug) return exact.slug;
+
+  // Then try alias map
+  const aliased = CLUSTER_ALIASES[lower];
+  if (aliased) {
+    const { data: aliasMatch } = await db()
+      .from("categories")
+      .select("slug")
+      .eq("slug", aliased)
+      .maybeSingle();
+    if (aliasMatch?.slug) return aliasMatch.slug;
+  }
   return null;
 }
