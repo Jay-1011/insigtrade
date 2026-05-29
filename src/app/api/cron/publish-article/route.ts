@@ -56,6 +56,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Normalize block shapes the routine sometimes drifts from. The DB stores
+  // arbitrary jsonb, but the renderer expects canonical fields. Doing this
+  // here means every saved post is renderer-safe.
+  a.blocks = normalizeBlocks(a.blocks);
+
   // Hard quality gate: reject articles under 1,800 words (safety margin
   // below the 2,000 floor) so the routine retries instead of publishing
   // thin content.
@@ -272,6 +277,57 @@ function countArticleWords(a: GeneratedArticle): number {
     addText(f.a);
   }
   return n;
+}
+
+/**
+ * Coerce blocks produced by the routine into the canonical shape the
+ * BlockRenderer expects. Heals the two drifts we've actually seen:
+ *  - callout missing `variant`           -> defaults to "info"
+ *  - steps using { items: string[] }     -> { steps: [{title:"", body:str}] }
+ *  - steps using { items: [{title,body}] }-> { steps: same }
+ *
+ * Anything we don't recognize is passed through untouched so weirder
+ * block types fall through to the renderer's default case (already a no-op).
+ */
+function normalizeBlocks(blocks: unknown[]): GeneratedArticle["blocks"] {
+  return blocks.map((b) => {
+    const block = b as Record<string, unknown>;
+    switch (block.type) {
+      case "callout": {
+        const variant = block.variant;
+        const validVariants = ["info", "warning", "success", "tip"];
+        return {
+          ...block,
+          variant: validVariants.includes(variant as string) ? variant : "info",
+        };
+      }
+      case "steps": {
+        // Canonicalize on { steps: [{title, body}] }
+        const raw =
+          (block.steps as unknown) ??
+          (block.items as unknown) ??
+          [];
+        if (!Array.isArray(raw)) return { ...block, steps: [] };
+        const steps = raw.map((s) => {
+          if (typeof s === "string") return { title: "", body: s };
+          if (s && typeof s === "object") {
+            const obj = s as { title?: string; body?: string; text?: string };
+            return {
+              title: obj.title ?? "",
+              body: obj.body ?? obj.text ?? "",
+            };
+          }
+          return { title: "", body: "" };
+        });
+        // Strip the spurious `items` so we don't keep both fields
+        const { items: _ignored, ...rest } = block as { items?: unknown };
+        void _ignored;
+        return { ...rest, steps };
+      }
+      default:
+        return block;
+    }
+  }) as GeneratedArticle["blocks"];
 }
 
 const BANNED_DASHES = ["—", "–"];

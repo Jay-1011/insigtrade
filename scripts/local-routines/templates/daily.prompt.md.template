@@ -39,6 +39,25 @@ No auth needed. Response: { links: [ { label, href }, ... ] }. If this fails, us
 7. block: { "type":"newsletter" }   OR   a single cta block (not both)
 8. FAQs separately in the faqs field: 5-6 Q/A pairs, each answer 40-80 words
 
+### CRITICAL: exact block shapes (the renderer crashes on drift)
+
+Use EXACTLY these shapes. The publish endpoint will reject malformed blocks.
+
+- paragraph:      { "type":"paragraph", "text":"..." }
+- heading:        { "type":"heading", "level":2, "text":"..." }                (level is 2|3|4)
+- tldr:           { "type":"tldr", "text":"..." }
+- key-takeaways:  { "type":"key-takeaways", "items":["bullet 1","bullet 2","..."] }
+- checklist:      { "type":"checklist", "items":["item 1","item 2","..."] }
+- callout:        { "type":"callout", "variant":"info|warning|success|tip", "title":"optional", "text":"..." }
+                  variant is REQUIRED. Use "info" by default, "warning" for risks, "tip" for shortcuts, "success" for wins.
+- steps:          { "type":"steps", "title":"optional", "steps":[ {"title":"Step 1","body":"..."}, {"title":"Step 2","body":"..."} ] }
+                  Each step has BOTH `title` and `body`. Do NOT use { "items": [...strings...] }.
+- table:          { "type":"table", "headers":["col 1","col 2"], "rows":[["a","b"],["c","d"]] }
+- pros-cons:      { "type":"pros-cons", "pros":["..."], "cons":["..."] }
+- internal-links: { "type":"internal-links", "title":"Keep reading", "links":[{"label":"...","href":"/blog/..."}] }
+- newsletter:     { "type":"newsletter" }
+- cta:            { "type":"cta", "title":"...", "text":"optional", "ctaLabel":"...", "ctaHref":"https://..." }
+
 ### Format selection (set article.format accordingly)
 - Keyword contains ' vs '             -> "comparison" (must include a table + verdict)
 - Keyword starts with 'best ' / 'top N' -> "listicle"  (per-item pros-cons OR table)

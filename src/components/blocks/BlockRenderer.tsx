@@ -86,7 +86,10 @@ export function BlockRenderer({
       );
 
     case "callout": {
-      const cfg = calloutStyles[block.variant];
+      // Defensive: routines occasionally omit `variant`. Fall back to 'info'
+      // so the page never 500s on AI-generated content.
+      const variant = (block.variant ?? "info") as keyof typeof calloutStyles;
+      const cfg = calloutStyles[variant] ?? calloutStyles.info;
       const Icon = cfg.icon;
       return (
         <div className={`my-6 p-5 rounded-xl border ${cfg.bg} ${cfg.border} flex gap-3`}>
@@ -379,7 +382,21 @@ export function BlockRenderer({
         </div>
       );
 
-    case "steps":
+    case "steps": {
+      // Defensive: routines sometimes emit { items: string[] } instead of
+      // the canonical { steps: { title, body }[] }. Coerce either shape so
+      // the page renders.
+      const rawSteps: unknown =
+        (block as { steps?: unknown }).steps ??
+        (block as { items?: unknown }).items ??
+        [];
+      const steps = Array.isArray(rawSteps)
+        ? rawSteps.map((s) =>
+            typeof s === "string"
+              ? { title: "", body: s }
+              : ((s as { title?: string; body?: string; text?: string }) ?? {})
+          )
+        : [];
       return (
         <div className="my-8">
           {block.title && (
@@ -388,20 +405,32 @@ export function BlockRenderer({
             </p>
           )}
           <ol className="space-y-5">
-            {block.steps.map((s, i) => (
-              <li key={i} className="flex gap-4">
-                <div className="shrink-0 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
-                  {i + 1}
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy mb-1">{s.title}</h4>
-                  <p className="text-sm text-slate-700 leading-relaxed">{s.body}</p>
-                </div>
-              </li>
-            ))}
+            {steps.map((s, i) => {
+              const body =
+                (s as { body?: string; text?: string }).body ??
+                (s as { body?: string; text?: string }).text ??
+                "";
+              const title = (s as { title?: string }).title ?? "";
+              return (
+                <li key={i} className="flex gap-4">
+                  <div className="shrink-0 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                    {i + 1}
+                  </div>
+                  <div>
+                    {title && (
+                      <h4 className="font-bold text-navy mb-1">{title}</h4>
+                    )}
+                    <p className="text-sm text-slate-700 leading-relaxed">
+                      {body}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </div>
       );
+    }
 
     case "how-to":
       return (
