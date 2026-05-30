@@ -39,9 +39,12 @@
   <key>RunAtLoad</key>
   <false/>
 
-  <!-- If the Mac was asleep at fire time, run as soon as it wakes (within reason). -->
-  <key>StartCalendarIntervalIgnoreMissed</key>
-  <false/>
+  <!--
+    Catch-up behavior is the launchd default for StartCalendarInterval:
+    if the Mac was asleep at fire time, launchd runs the job ~30s after
+    wake. Multiple missed slots are collapsed into a single run.
+    If the Mac was powered off, the missed run is lost.
+  -->
 
   <key>StandardOutPath</key>
   <string>__ROUTINE_DIR__/logs/daily.launchd.out.log</string>
