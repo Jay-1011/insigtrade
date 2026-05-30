@@ -86,12 +86,38 @@ If you have the Higgsfield MCP available (any tool starting with mcp__*__generat
   model: 'z_image'
   aspect_ratio: '16:9'
   count: 1
-  prompt: "Cinematic abstract editorial illustration of <TOPIC>, premium fintech aesthetic, deep navy and electric blue gradient with subtle cyan or amber accents, soft particle bokeh, glowing translucent dashboard or data ribbon elements, dramatic depth of field, ultra clean composition. No text, no logos, no letters, no numbers, no UI labels, no chart axis text."
+  prompt: "<<assembled per the formula below>>"
+
+### Pick a color palette that fits the topic and mood
+
+Do NOT default to navy/blue every time. Across consecutive posts the blog cards should feel visually distinct. Pick whichever palette fits this specific article's topic and mood. If unsure, pick at random — variety beats lock-in.
+
+Palette menu (pick exactly one per image; substitute "<PALETTE>" in the prompt formula):
+
+| When the topic is about… | Palette to use |
+|---|---|
+| Trading dashboards, market data, journals     | "deep navy with electric blue and teal accents" |
+| Risk, losses, drawdowns, compliance, warnings | "deep crimson and obsidian black with warm amber highlights" |
+| Wins, gains, optimism, growth                 | "rich emerald green with chartreuse and gold accents" |
+| AI models, ChatGPT, Claude, neural concepts   | "deep violet and indigo with electric magenta and cyan accents" |
+| Automation, workflows, no-code, integrations  | "electric cyan and teal with neon green accents on midnight" |
+| Productivity, journaling, focus, calm         | "warm charcoal with soft amber, terracotta, and cream accents" |
+| Research, reports, analysis, neutral          | "slate gray and steel blue with subtle peach highlights" |
+| Wealth, premium, luxury, sophistication       | "deep burgundy and black with brushed gold and copper accents" |
+| Energy, urgency, breaking news, alerts        | "vivid orange and magenta on dark plum" |
+
+Avoid using the same palette twice in a single run. If you're publishing 2 posts in this run, pick 2 different palettes.
+
+### Prompt formula
+
+  Cinematic abstract editorial illustration of <TOPIC>, premium editorial aesthetic, <PALETTE>, soft particle bokeh, glowing translucent dashboard, light ribbon, or geometric elements that fit the topic, dramatic depth of field, ultra clean composition. No text, no logos, no letters, no numbers, no UI labels, no chart axis text.
 
 Where <TOPIC> is a 6-12 word visual descriptor (NOT the article title). Examples:
 - best AI trading journal apps -> "floating glass trading journal dashboard panels with chart visualizations"
 - how to automate trading journal with make.com -> "flowing luminous data ribbons connecting translucent workflow nodes"
-- chatgpt for stock research -> "glowing neural network brain overlaid on faded candlestick chart skyline"
+- chatgpt for stock research -> "glowing neural network brain overlaid on faded candlestick chart silhouette"
+- claude for earnings prep -> "translucent floating documents with abstract data nodes weaving between them"
+- best stock screeners 2026 -> "concentric holographic rings filtering through abstract candlestick fragments"
 
 Poll for completion (job_display), grab results.rawUrl as $IMG_URL. Wait up to 60s total. If the MCP isn't available or generation times out, proceed without an image — the publish endpoint accepts no image_url and falls back to the dynamic OG image.
 
