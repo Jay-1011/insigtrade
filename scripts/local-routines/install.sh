@@ -45,7 +45,8 @@ echo "✓ Ensured $ROUTINE_DIR/"
 # ── 3. render claude-wrapper.sh + runner.sh ────────────────────
 install -m 0755 "$TEMPLATES_DIR/claude-wrapper.sh.template" "$ROUTINE_DIR/claude-wrapper.sh"
 install -m 0755 "$TEMPLATES_DIR/runner.sh.template"         "$ROUTINE_DIR/runner.sh"
-echo "✓ Installed claude-wrapper.sh + runner.sh"
+install -m 0755 "$TEMPLATES_DIR/status.sh.template"         "$ROUTINE_DIR/status.sh"
+echo "✓ Installed claude-wrapper.sh + runner.sh + status.sh"
 
 # ── 4. render prompt files ─────────────────────────────────────
 render_prompt() {
