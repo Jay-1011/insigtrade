@@ -12,6 +12,8 @@ import { db } from "@/lib/supabase/server";
 import { articleToPost, type GeneratedArticle } from "@/lib/ai/claude";
 import { savePost, saveKeyword, slugifyStr } from "@/lib/cms/store";
 import type { Keyword } from "@/lib/cms/types";
+import { submitToIndexNow } from "@/lib/seo/indexnow";
+import { site, absoluteUrl } from "@/lib/seo/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -195,6 +197,13 @@ export async function POST(req: NextRequest) {
     console.error("[cron] saveKeyword failed:", e);
   }
 
+  // Ping IndexNow (Bing + Yandex) so the new post is discovered within
+  // minutes instead of waiting for the next sitemap crawl. Fire-and-forget;
+  // errors are swallowed inside submitToIndexNow.
+  const postUrl = absoluteUrl(`/blog/${slug}`);
+  const sitemapUrl = `${site.url.replace(/\/$/, "")}/sitemap.xml`;
+  const indexnow = await submitToIndexNow([postUrl, sitemapUrl]);
+
   return Response.json({
     ok: true,
     slug,
@@ -202,6 +211,7 @@ export async function POST(req: NextRequest) {
     wordCount,
     keyword_id: body.keyword_id,
     featured_image: heroImageUrl ?? null,
+    indexnow: { ok: indexnow.ok, submitted: indexnow.submitted },
   });
 }
 

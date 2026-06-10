@@ -22,6 +22,8 @@ import { NextRequest } from "next/server";
 import { authorizeCronRequest } from "@/lib/cron/auth";
 import { db } from "@/lib/supabase/server";
 import type { GeneratedArticle } from "@/lib/ai/claude";
+import { submitToIndexNow } from "@/lib/seo/indexnow";
+import { site, absoluteUrl } from "@/lib/seo/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -139,6 +141,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Ping IndexNow with the rewritten URL — Bing/Yandex re-fetch quickly.
+  const postUrl = absoluteUrl(`/blog/${existing.slug}`);
+  const sitemapUrl = `${site.url.replace(/\/$/, "")}/sitemap.xml`;
+  const indexnow = await submitToIndexNow([postUrl, sitemapUrl]);
+
   return Response.json({
     ok: true,
     post_id: body.post_id,
@@ -146,6 +153,7 @@ export async function POST(req: NextRequest) {
     title: body.preserve_title ? existing.title : a.title,
     wordCount,
     featured_image: heroImageUrl ?? null,
+    indexnow: { ok: indexnow.ok, submitted: indexnow.submitted },
   });
 }
 
