@@ -22,12 +22,17 @@
     <string>__HOME__</string>
   </dict>
 
-  <!-- Monday 08:00 local time. -->
+  <!--
+    Renamed conceptually to "queue-keeper": fires every day at 09:30 local.
+    The prompt's "skip if idea > 60" guard means almost every run is a
+    no-op that exits in ~5 seconds; only when the queue is low does it
+    actually refill. This replaces the original Monday-08:00 schedule
+    which never fired because the Mac was asleep at 08:00.
+  -->
   <key>StartCalendarInterval</key>
   <dict>
-    <key>Weekday</key><integer>1</integer>
-    <key>Hour</key><integer>8</integer>
-    <key>Minute</key><integer>0</integer>
+    <key>Hour</key><integer>9</integer>
+    <key>Minute</key><integer>30</integer>
   </dict>
 
   <key>RunAtLoad</key>
