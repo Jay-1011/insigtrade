@@ -24,6 +24,7 @@ import { db } from "@/lib/supabase/server";
 import type { GeneratedArticle } from "@/lib/ai/claude";
 import { submitToIndexNow } from "@/lib/seo/indexnow";
 import { site, absoluteUrl } from "@/lib/seo/site";
+import { mirrorImageToStorage } from "@/lib/seo/mirror-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -102,7 +103,8 @@ export async function POST(req: NextRequest) {
   let heroImageAlt: string | undefined;
   if (body.image_url) {
     try {
-      heroImageUrl = await mirrorImageToStorage(body.image_url, existing.slug);
+      const mirror = await mirrorImageToStorage(body.image_url, existing.slug);
+      heroImageUrl = mirror.publicUrl;
       heroImageAlt =
         body.image_alt ??
         `Abstract editorial illustration related to ${a.title}`;
@@ -209,33 +211,3 @@ function scanForAiTells(a: GeneratedArticle): string | null {
   return null;
 }
 
-async function mirrorImageToStorage(
-  sourceUrl: string,
-  slug: string
-): Promise<string> {
-  if (!/^https?:\/\//i.test(sourceUrl)) {
-    throw new Error("image_url must be http(s)");
-  }
-  const res = await fetch(sourceUrl);
-  if (!res.ok) throw new Error(`fetch image: HTTP ${res.status}`);
-  const contentType = res.headers.get("content-type") ?? "image/jpeg";
-  let ext = "jpg";
-  if (contentType.includes("png")) ext = "png";
-  else if (contentType.includes("webp")) ext = "webp";
-
-  const buf = new Uint8Array(await res.arrayBuffer());
-  const objectPath = `${slug}.${ext}`;
-
-  const { error: upErr } = await db()
-    .storage.from("blog")
-    .upload(objectPath, buf, {
-      contentType,
-      upsert: true,
-      cacheControl: "31536000",
-    });
-  if (upErr) throw new Error(`storage upload: ${upErr.message}`);
-
-  const { data: pub } = db().storage.from("blog").getPublicUrl(objectPath);
-  if (!pub?.publicUrl) throw new Error("could not resolve public URL");
-  return pub.publicUrl;
-}

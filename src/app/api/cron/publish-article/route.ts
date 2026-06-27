@@ -14,6 +14,7 @@ import { savePost, saveKeyword, slugifyStr } from "@/lib/cms/store";
 import type { Keyword } from "@/lib/cms/types";
 import { submitToIndexNow } from "@/lib/seo/indexnow";
 import { site, absoluteUrl } from "@/lib/seo/site";
+import { mirrorImageToStorage } from "@/lib/seo/mirror-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -149,7 +150,8 @@ export async function POST(req: NextRequest) {
   let heroImageAlt: string | undefined;
   if (body.image_url) {
     try {
-      heroImageUrl = await mirrorImageToStorage(body.image_url, slug);
+      const mirror = await mirrorImageToStorage(body.image_url, slug);
+      heroImageUrl = mirror.publicUrl;
       heroImageAlt =
         body.image_alt ??
         `Abstract editorial illustration related to ${a.title}`;
@@ -213,44 +215,6 @@ export async function POST(req: NextRequest) {
     featured_image: heroImageUrl ?? null,
     indexnow: { ok: indexnow.ok, submitted: indexnow.submitted },
   });
-}
-
-/**
- * Download a remote image URL and re-upload it to the public 'blog' bucket
- * in Supabase Storage. Returns the stable public Storage URL on success.
- * Caller wraps in try/catch — never throws to the API consumer.
- */
-async function mirrorImageToStorage(
-  sourceUrl: string,
-  slug: string
-): Promise<string> {
-  if (!/^https?:\/\//i.test(sourceUrl)) {
-    throw new Error("image_url must be http(s)");
-  }
-  const res = await fetch(sourceUrl);
-  if (!res.ok) throw new Error(`fetch image: HTTP ${res.status}`);
-  const contentType = res.headers.get("content-type") ?? "image/jpeg";
-  // We accept png/jpeg/webp from the upstream and normalize the storage
-  // extension based on the response content-type.
-  let ext = "jpg";
-  if (contentType.includes("png")) ext = "png";
-  else if (contentType.includes("webp")) ext = "webp";
-
-  const buf = new Uint8Array(await res.arrayBuffer());
-  const objectPath = `${slug}.${ext}`;
-
-  const { error: upErr } = await db()
-    .storage.from("blog")
-    .upload(objectPath, buf, {
-      contentType,
-      upsert: true,
-      cacheControl: "31536000", // 1y, the slug is unique per post
-    });
-  if (upErr) throw new Error(`storage upload: ${upErr.message}`);
-
-  const { data: pub } = db().storage.from("blog").getPublicUrl(objectPath);
-  if (!pub?.publicUrl) throw new Error("could not resolve public URL");
-  return pub.publicUrl;
 }
 
 // ── helpers ──────────────────────────────────────────────────
