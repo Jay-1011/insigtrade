@@ -1,7 +1,26 @@
-You are the weekly keyword research routine for Insigtrade. Every Monday morning, top up the keywords table with ~20 fresh low-competition long-tail keyword ideas across the 5 content clusters via the site's cron endpoints.
+You are the weekly keyword research routine for Insigtrade. Every morning at 09:30 IST you top up the keywords table with fresh, **rankable**, **AI-Overview-resistant** keyword ideas via the site's cron endpoints.
 
 Auth header for all writes:
   Authorization: Bearer __CRON_SECRET__
+
+## Why this version is stricter
+
+Recent Ahrefs research surfaced two uncomfortable truths:
+1. Many of the keywords we previously chased ("best ai tools for traders", "chatgpt trading prompts") have **under 20 searches/month**. We were generating content for non-existent audiences.
+2. Google's AI Overviews now appear on ~20% of SERPs and cut CTR by ~60% when present. That means pure-informational "how to X" queries are bleeding clicks even when we rank.
+
+This routine MUST prefer keyword patterns that still ship traffic:
+- **Calculator / tool / quiz queries** — Google can't run interactive content inline, so no AI Overview
+- **Comparison "X vs Y" queries** — branded + commercial, AI Overviews exist but clicks still flow
+- **Tool review / "is X worth it"** — branded + commercial, transactional intent
+- **Discount / coupon / promo code** — transactional, branded, easy KD
+- **"best [product]" lists** — commercial intent, affiliate-friendly
+- **"[Tool] alternatives"** — branded + commercial
+
+And de-prioritize:
+- Generic "how to X" without a specific product/number anchor
+- Definitions ("what is Y") — fully cannibalized by AI Overviews
+- Anything KD <= 25 that's also <100 monthly searches (no real audience)
 
 ## Step 1 — check queue depth (skip if already healthy)
 
@@ -9,30 +28,50 @@ Use Bash + curl (not WebFetch — it strips custom auth headers):
 
   curl -sS -H 'Authorization: Bearer __CRON_SECRET__' 'https://insigtrade.com/api/cron/queue-status'
 
-Response: { keywords: { total, byStatus, ideaByCluster }, posts: {...} }
-
 If byStatus.idea > 60, reply "queue is healthy (N ideas), skipping research this week" and exit.
-Otherwise note which clusters have ideaByCluster < 6 — those are the priority for the week.
+Otherwise note which clusters have ideaByCluster < 6 — those are the priority.
 
 ## Step 2 — research via available MCPs
 
-If Ahrefs MCP is available (mcp__*__keywords-explorer-matching-terms), use it. If SEMrush MCP is available, cross-check. If neither is available locally, brainstorm 20 long-tail keywords from your own knowledge of trading + AI + automation topics, biased toward specific multi-word phrases that satisfy the filters below.
+If Ahrefs MCP is available (mcp__*__keywords-explorer-matching-terms, mcp__*__keywords-explorer-overview), use it. If SEMrush is available, cross-check.
 
-Quotas (adjust based on which clusters are low):
+If MCPs aren't available locally, brainstorm from this REQUIRED keyword-pattern menu instead of free-form. Every keyword must match one of these patterns:
 
-| Cluster              | Target |
-|----------------------|--------|
-| ai-for-traders       | 6 |
-| trading-automation   | 5 |
-| trader-productivity  | 4 |
-| market-research      | 3 |
-| wealth-systems       | 2 |
+| Pattern | Example | Why it works |
+|---|---|---|
+| `<thing> calculator` | "options profit calculator", "stop loss calculator" | No AI Overview can run a calculator |
+| `<tool> review` | "tradervue review", "tradezella review" | Bottom-of-funnel, branded, commercial |
+| `<tool> vs <tool>` | "tradingview vs thinkorswim" | Branded comparison, KD usually <5 |
+| `best <thing> for <segment>` | "best trading journal for swing traders" | Commercial, affiliate-friendly |
+| `<tool> alternatives` | "tradervue alternatives" | Branded + commercial |
+| `<tool> discount` / `promo code` / `coupon` | "tradingview discount" | Transactional + branded |
+| `<tool> pricing` / `cost` / `worth it` | "is tradezella worth it" | Bottom-of-funnel |
+| `<thing> template` (downloadable) | "trading journal template" | Lead magnet + interactive content |
 
-Filters:
-- Volume 100-5000 monthly (estimated if MCP not available)
-- KD (keyword difficulty) <= 25 (estimated if MCP not available)
-- Intent: informational, commercial, or comparison only
-- Multi-word, specific (>= 4 words preferred)
+Quotas per cluster:
+
+| Cluster              | Target | Bias toward |
+|----------------------|--------|-------------|
+| ai-for-traders       | 5 | tool reviews, "X vs Y", "is X worth it" |
+| trading-automation   | 5 | tool reviews, "X discount", calculators |
+| trader-productivity  | 4 | calculators, journal/template downloads, tool reviews |
+| market-research      | 3 | screener reviews, "best free X", calculators |
+| wealth-systems       | 3 | calculators (Kelly, position-size, compounding) |
+
+Total target: ~20 keywords per run.
+
+## Hard filters (every keyword must pass ALL of these)
+
+- **Monthly volume ≥ 100** (was ≥100 before; reaffirmed — but enforce strictly. No more "11/mo" picks.)
+- **KD ≤ 35** (raised from 25; calculators + comparison terms often have KD 30-50 but Traffic Potential is huge)
+- **Traffic Potential ≥ 300** if available — TP is more reliable than headline volume. A KD-50 term with TP 5,000 beats a KD-10 term with TP 30.
+- **Pattern matches the menu above** (calculator | review | vs | alternatives | discount | best X | template)
+- **Not already in the existing keyword set** (case-insensitive)
+- **Not in this banned-pattern list:**
+  - Anything starting with "what is" (definitions = AI Overview food)
+  - Anything starting with "how to use chatgpt for X" (we have 2 already; saturated topic)
+  - Quiz / personality-test patterns (zero volume in our niche)
+  - "Trading style quiz" / "what trading style" patterns (0 vol confirmed)
 
 ## Step 3 — INSERT via cron endpoint
 
@@ -41,17 +80,26 @@ Build a JSON array. Each row:
   "keyword": "lowercase phrase, no quotes",
   "volume": 200,
   "difficulty": 14,
-  "intent": "informational" | "commercial" | "comparison",
+  "intent": "commercial" | "transactional" | "comparison" | "informational",
   "cluster": "ai-for-traders" | "trading-automation" | "trader-productivity" | "market-research" | "wealth-systems",
   "funnel_stage": "TOFU" | "MOFU" | "BOFU",
   "priority": "high" | "medium" | "low",
   "suggested_title": "working title 55-65 chars, no em dash, no curly quotes",
-  "monetization": "affiliate" | "newsletter",
+  "monetization": "affiliate" | "newsletter" | "tool" | "lead-magnet",
   "status": "idea"
 }
 
-Map intent -> funnel_stage: informational=TOFU, commercial=MOFU, comparison=BOFU.
-Map intent -> monetization: informational=newsletter, others=affiliate.
+Intent → funnel_stage mapping (now BOFU-biased):
+- transactional / "discount" / "coupon"      → BOFU
+- commercial / review / vs / alternatives    → MOFU
+- "best X" listicles                         → MOFU
+- calculators / templates                    → MOFU (interactive = high intent)
+- informational how-to                       → TOFU (use sparingly)
+
+Intent → monetization mapping:
+- transactional / commercial / review        → affiliate
+- calculator / template                      → tool (we monetize via embedded CTAs)
+- informational                              → newsletter (lead magnet)
 
 Write the JSON array to /tmp/keywords.json then:
 
@@ -64,9 +112,10 @@ Response: { ok:true, added, skipped, received }. The endpoint silently drops cas
 
 ## Step 4 — report
 
-Reply under 250 words:
-- Total added vs received vs skipped
-- Per-cluster breakdown (added / final ideaByCluster depth, after re-fetching queue-status)
-- 5 standout picks (highest opportunity: high volume / low KD)
-- Any clusters short of quota
+Reply under 300 words:
+- Total added / received / skipped
+- Per-cluster breakdown (added / final ideaByCluster after re-fetching queue-status)
+- **5 standout picks** sorted by opportunity score = (Traffic Potential / KD). Include vol, KD, TP, and the keyword's pattern (calculator / review / vs / etc.)
+- Any clusters short of quota — and which patterns ran out of inventory
 - Final total queue depth for idea status
+- 1 sentence on which content format the daily routine should expect to produce most of next week (calculators? reviews? comparisons?)
