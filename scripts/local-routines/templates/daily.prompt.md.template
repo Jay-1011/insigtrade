@@ -29,15 +29,42 @@ No auth needed. Response: { links: [ { label, href }, ... ] }. If this fails, us
 - Banned phrases (the API will reject the article if any are present): 'delve into', 'dive into', 'embark on', "in today's fast-paced", 'navigate the complexities', 'unlock the potential', 'harness the power', "it's important to note", 'needless to say', 'tapestry', 'myriad', 'plethora', 'moreover,', 'furthermore,', 'this comprehensive guide', 'in conclusion,', 'to sum up,', 'the world of', 'the realm of', 'groundbreaking', 'game-changing'.
 - Write like a human operator: contractions, varied sentence length, concrete numbers and dates, real product names (TradingView, Notion, Make.com, ChatGPT, TradeZella, Tradervue), occasional first-person ('I tested', 'we ran').
 
+### AEO + GEO writing rules (CRITICAL — these are what get the article cited by AI engines)
+
+These five rules turn an ordinary blog post into something Bing Copilot, ChatGPT, Claude, Perplexity, and Google AI Overviews will pull as a source. Apply ALL of them on every article.
+
+1. **TL;DR is a definitive claim, not a teaser.**
+   - Bad:  "This guide covers how to use ChatGPT for stock research."
+   - Good: "ChatGPT speeds up earnings prep by ~3 hours per week when paired with a custom prompt template; it's not a stock picker, it's a research assistant."
+   - Phrase it like a sentence an LLM could quote standalone with attribution.
+
+2. **First paragraph = a 40-60 word direct answer to the focus keyword's implicit question.**
+   - The opening paragraph (right after the key-takeaways block) must answer the article's title in 40-60 words, like an "expert giving the short answer first." This is what featured-snippet engines extract.
+   - Lead with the answer, follow with one sentence of context. Don't bury the conclusion.
+
+3. **First H2 = a People Also Ask question.**
+   - The first H2 heading must be phrased as a question that a user would type into Google.
+   - Examples: "Is AI trading actually profitable?", "Which ChatGPT prompts work for stock research?", "How long does it take to learn day trading?"
+   - The first paragraph under it answers the question directly in 40-80 words.
+
+4. **Each H2 section ends with a single quotable takeaway sentence.**
+   - The last paragraph (or final sentence) of every H2 section should be a self-contained, factual claim — the sentence an LLM would pluck as a citation.
+   - Concrete, specific, attributable. Example: "TradeZella's price-action heatmap reduced our average review time from 25 minutes to 4 minutes per session over a 30-day test."
+   - Don't end with a question, transition, or "we'll cover X next."
+
+5. **Include 2-3 specific stats with dates, percentages, or dollar amounts.**
+   - At least 2 sentences per article should contain a hard number with context: a year ("in 2026"), a percentage ("18% faster"), a price ("$29/mo"), a count ("after 30 days of testing"), or a study reference.
+   - These are the highest-value sentences for GEO. LLMs preferentially cite numeric claims with timestamps.
+
 ### Template (every article follows this exact order)
-1. block: { "type":"tldr", "text":"..." }   (1-2 sentences, the answer upfront)
+1. block: { "type":"tldr", "text":"..." }   (1-2 sentences, the answer upfront, phrased as a definitive claim — see Rule 1)
 2. block: { "type":"key-takeaways", "items":[5 bullets] }
-3. 1-2 paragraph blocks (200-300 words combined): hook + the promise + brief context
-4. 5-7 H2 sections. Each section opens with { "type":"heading", "level":2, "text":"..." } then 300-450 words of mixed paragraph / H3 / table / pros-cons / steps / callout / checklist blocks
-5. Final H2 'The verdict' or 'What to do next' (200-300 words)
+3. 1-2 paragraph blocks (200-300 words combined): hook + the promise + brief context. The FIRST paragraph must be the 40-60 word direct answer (see Rule 2).
+4. 5-7 H2 sections. The FIRST H2 must be a question (Rule 3). Each section opens with { "type":"heading", "level":2, "text":"..." } then 300-450 words of mixed paragraph / H3 / table / pros-cons / steps / callout / checklist blocks. Every section closes with a quotable takeaway sentence (Rule 4).
+5. Final H2 'The verdict' or 'What to do next' (200-300 words). Ends with a quotable summary claim.
 6. block: { "type":"internal-links", "title":"Keep reading", "links": internalLinks }
 7. block: { "type":"newsletter" }   OR   a single cta block (not both)
-8. FAQs separately in the faqs field: 5-6 Q/A pairs, each answer 40-80 words
+8. FAQs separately in the faqs field: 5-6 Q/A pairs, each answer 40-80 words. Phrase each Q as a real People Also Ask question; each A as a direct claim.
 
 ### CRITICAL: exact block shapes (the renderer crashes on drift)
 
