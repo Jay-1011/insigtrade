@@ -7,6 +7,7 @@ import { Menu, X, TrendingUp } from "lucide-react";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Blog", href: "/blog" },
+  { name: "Calculators", href: "/calculators" },
   { name: "Reviews", href: "/reviews" },
   { name: "Products", href: "/products" },
   { name: "About", href: "/about" },

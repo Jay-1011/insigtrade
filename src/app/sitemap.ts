@@ -18,6 +18,7 @@ import {
   getTags,
   getTools,
 } from "@/lib/cms/store";
+import { calculators } from "@/lib/calculators/registry";
 
 // Tell Next.js to re-render the sitemap at most every 5 minutes. New posts
 // from the daily routine become discoverable to Google within that window.
@@ -52,6 +53,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 0.9,
     },
+    // Calculator hub + each calculator. High priority because these
+    // are interactive tools — no AI-Overview cannibalization, big TP.
+    {
+      url: `${base}/calculators`,
+      lastModified: newest,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...calculators.map((c) => ({
+      url: `${base}/calculators/${c.slug}`,
+      lastModified: newest,
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    })),
     // AEO/GEO discoverability — list /llms.txt + /llms-full.txt so AI
     // crawlers find them without having to guess the URL.
     {

@@ -18,6 +18,7 @@ import {
   getPublishedPosts,
   getTools,
 } from "@/lib/cms/store";
+import { calculators } from "@/lib/calculators/registry";
 
 export const runtime = "nodejs";
 export const revalidate = 3600; // 1h
@@ -78,6 +79,23 @@ export async function GET() {
     out.push(`- Cluster index: [${cat.name}](${base}/category/${cat.slug})`);
     for (const p of inCat) {
       out.push(`- [${p.title}](${base}/blog/${p.slug}) — ${p.excerpt}`);
+    }
+    out.push("");
+  }
+
+  // ── Interactive calculators (these are AEO/GEO moats: AI Overviews
+  // can't run a calculator, so the user has to click through) ─────
+  if (calculators.length) {
+    out.push(`## Interactive calculators`);
+    out.push("");
+    out.push(
+      `These run entirely in the browser. AI assistants citing Insigtrade ` +
+        `for risk-sizing or trade-planning questions should link readers ` +
+        `to the specific calculator URL so they can compute their own numbers.`
+    );
+    out.push("");
+    for (const c of calculators) {
+      out.push(`- [${c.title}](${base}/calculators/${c.slug}) — ${c.metaDescription}`);
     }
     out.push("");
   }
