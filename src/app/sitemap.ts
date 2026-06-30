@@ -52,6 +52,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 0.9,
     },
+    // AEO/GEO discoverability — list /llms.txt + /llms-full.txt so AI
+    // crawlers find them without having to guess the URL.
+    {
+      url: `${base}/llms.txt`,
+      lastModified: newest,
+      changeFrequency: "daily",
+      priority: 0.6,
+    },
+    {
+      url: `${base}/llms-full.txt`,
+      lastModified: newest,
+      changeFrequency: "daily",
+      priority: 0.5,
+    },
     {
       url: `${base}/reviews`,
       lastModified: newestForFormat(posts, "tool-review") ?? newest,
