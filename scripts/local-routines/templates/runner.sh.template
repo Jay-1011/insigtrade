@@ -15,6 +15,16 @@ PROMPT_FILE="$ROUTINE_DIR/${ROUTINE}.prompt.md"
 LOG_DIR="$ROUTINE_DIR/logs"
 WRAPPER="$ROUTINE_DIR/claude-wrapper.sh"
 
+# When launchd fires this script, env vars come from the plist's
+# EnvironmentVariables block. When a user fires it manually from a shell,
+# they won't have them — so we source a tiny env file the installer drops
+# in the same directory. Keeps NOTIFY_EMAIL / RESEND_API_KEY consistent
+# across both paths.
+if [[ -f "$ROUTINE_DIR/env.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$ROUTINE_DIR/env.sh"
+fi
+
 mkdir -p "$LOG_DIR"
 STAMP=$(date "+%Y-%m-%d_%H%M%S")
 LOG_FILE="$LOG_DIR/${ROUTINE}_${STAMP}.log"
