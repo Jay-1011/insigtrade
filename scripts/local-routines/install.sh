@@ -24,13 +24,19 @@ TEMPLATES_DIR="$HERE/templates"
 ROUTINE_DIR="$HOME/insigtrade-routines"
 LAUNCHD_DIR="$HOME/Library/LaunchAgents"
 
-# ── 1. resolve CRON_SECRET ─────────────────────────────────────
-if [[ -z "${CRON_SECRET:-}" ]]; then
-  if [[ -f "$REPO_ROOT/.env.local" ]]; then
-    # shellcheck disable=SC2046
-    CRON_SECRET=$(grep -E '^CRON_SECRET=' "$REPO_ROOT/.env.local" | cut -d= -f2- | tr -d '"' | tr -d "'")
+# ── 1. resolve CRON_SECRET + optional notification env vars ──
+read_env_var() {
+  local name="$1"
+  if [[ -z "${(P)name:-}" ]]; then
+    if [[ -f "$REPO_ROOT/.env.local" ]]; then
+      eval "$name=$(grep -E "^${name}=" "$REPO_ROOT/.env.local" | cut -d= -f2- | tr -d '"' | tr -d "'")"
+    fi
   fi
-fi
+}
+read_env_var CRON_SECRET
+read_env_var RESEND_API_KEY
+read_env_var NOTIFY_EMAIL
+
 if [[ -z "${CRON_SECRET:-}" ]]; then
   echo "✗ CRON_SECRET is not set." >&2
   echo "  Either export CRON_SECRET=... in your shell, or put it in $REPO_ROOT/.env.local" >&2
@@ -38,15 +44,27 @@ if [[ -z "${CRON_SECRET:-}" ]]; then
 fi
 echo "✓ Found CRON_SECRET (${#CRON_SECRET} chars)"
 
+if [[ -n "${RESEND_API_KEY:-}" ]]; then
+  echo "✓ Found RESEND_API_KEY (${#RESEND_API_KEY} chars) — email notifications enabled"
+else
+  echo "ℹ RESEND_API_KEY not set — only macOS notifications. Sign up at"
+  echo "  https://resend.com (free, ~2 min), add RESEND_API_KEY to .env.local,"
+  echo "  then re-run this installer to enable email alerts."
+fi
+
+NOTIFY_EMAIL="${NOTIFY_EMAIL:-jaypatel1833@gmail.com}"
+echo "✓ Notifications will go to: $NOTIFY_EMAIL"
+
 # ── 2. set up directory ────────────────────────────────────────
 mkdir -p "$ROUTINE_DIR/logs"
 echo "✓ Ensured $ROUTINE_DIR/"
 
-# ── 3. render claude-wrapper.sh + runner.sh ────────────────────
+# ── 3. render scripts ──────────────────────────────────────────
 install -m 0755 "$TEMPLATES_DIR/claude-wrapper.sh.template" "$ROUTINE_DIR/claude-wrapper.sh"
 install -m 0755 "$TEMPLATES_DIR/runner.sh.template"         "$ROUTINE_DIR/runner.sh"
 install -m 0755 "$TEMPLATES_DIR/status.sh.template"         "$ROUTINE_DIR/status.sh"
-echo "✓ Installed claude-wrapper.sh + runner.sh + status.sh"
+install -m 0755 "$TEMPLATES_DIR/notify.sh.template"         "$ROUTINE_DIR/notify.sh"
+echo "✓ Installed claude-wrapper.sh + runner.sh + status.sh + notify.sh"
 
 # ── 4. render prompt files ─────────────────────────────────────
 render_prompt() {
@@ -68,12 +86,19 @@ render_plist() {
   local name="$1"
   local src="$TEMPLATES_DIR/com.insigtrade.${name}.plist.template"
   local dst="$LAUNCHD_DIR/com.insigtrade.${name}.plist"
-  awk -v home="$HOME" -v routine_dir="$ROUTINE_DIR" '{
+  awk -v home="$HOME" \
+      -v routine_dir="$ROUTINE_DIR" \
+      -v notify_email="$NOTIFY_EMAIL" \
+      -v resend_key="${RESEND_API_KEY:-}" '{
     gsub(/__HOME__/, home);
     gsub(/__ROUTINE_DIR__/, routine_dir);
+    gsub(/__NOTIFY_EMAIL__/, notify_email);
+    gsub(/__RESEND_API_KEY__/, resend_key);
     print
   }' "$src" >"$dst"
-  echo "✓ Rendered $dst"
+  # Plist contains the Resend key — keep it private.
+  chmod 600 "$dst"
+  echo "✓ Rendered $dst (mode 600)"
 }
 render_plist daily
 render_plist weekly
@@ -100,4 +125,15 @@ echo ""
 echo "Trigger the daily routine now (one-off test) with:"
 echo "  $ROUTINE_DIR/runner.sh daily"
 echo "  tail -f $ROUTINE_DIR/logs/daily_*.log"
+echo ""
+echo "Notifications:"
+echo "  - macOS Notification Center alerts on every real run"
+if [[ -n "${RESEND_API_KEY:-}" ]]; then
+  echo "  - Emails go to $NOTIFY_EMAIL via Resend"
+else
+  echo "  - Email DISABLED. To enable:"
+  echo "    1. Sign up at https://resend.com with $NOTIFY_EMAIL"
+  echo "    2. Copy your API key into .env.local as RESEND_API_KEY=re_..."
+  echo "    3. Re-run this installer"
+fi
 echo "==========================================================="

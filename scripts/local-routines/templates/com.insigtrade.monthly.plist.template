@@ -20,6 +20,10 @@
     <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>HOME</key>
     <string>__HOME__</string>
+    <key>NOTIFY_EMAIL</key>
+    <string>__NOTIFY_EMAIL__</string>
+    <key>RESEND_API_KEY</key>
+    <string>__RESEND_API_KEY__</string>
   </dict>
 
   <!-- 1st of every month, 09:00 local time. -->

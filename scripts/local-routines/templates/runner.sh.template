@@ -55,4 +55,13 @@ EXIT_CODE=$?
   echo ""
 } >>"$LOG_FILE"
 
+# ── Notification step ──────────────────────────────────────────
+# Fires a macOS notification + (if RESEND_API_KEY is set) an email to
+# NOTIFY_EMAIL. Suppresses email for harmless no-op exits (queue healthy,
+# empty queue, insufficient data) so you only hear about real outcomes.
+NOTIFY="$ROUTINE_DIR/notify.sh"
+if [[ -x "$NOTIFY" ]]; then
+  "$NOTIFY" "$ROUTINE" "$EXIT_CODE" "$LOG_FILE" || true
+fi
+
 exit "$EXIT_CODE"

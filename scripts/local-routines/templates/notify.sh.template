@@ -1,0 +1,126 @@
+#!/bin/zsh
+# Insigtrade routine notifier — emits a success/failure email + macOS
+# notification after each routine run.
+#
+# Two-tier delivery:
+#   1) macOS Notification Center via osascript — always works, no setup.
+#   2) Email via Resend (https://resend.com) — only if RESEND_API_KEY is
+#      set in the environment. Free tier = 100 emails/day, plenty for us.
+#
+# Called by runner.sh as:
+#   notify.sh <routine_name> <exit_code> <log_path>
+
+set -uo pipefail
+
+ROUTINE="${1:?routine name}"
+EXIT_CODE="${2:?exit code}"
+LOG_PATH="${3:?log path}"
+ROUTINE_DIR="$HOME/insigtrade-routines"
+
+if [[ ! -f "$LOG_PATH" ]]; then
+  echo "[notify] log not found: $LOG_PATH" >&2
+  exit 0
+fi
+
+# ── Decide outcome ─────────────────────────────────────────────
+LEVEL="success"
+SHOULD_NOTIFY=1
+if [[ "$EXIT_CODE" != "0" ]]; then
+  LEVEL="failure"
+elif grep -qE "queue is healthy|no keyword ideas left|insufficient data, only" "$LOG_PATH"; then
+  # The routine ran but had nothing to do. Silent — no email noise.
+  SHOULD_NOTIFY=0
+  LEVEL="noop"
+fi
+
+# Always log the decision so we can audit
+{
+  echo "[notify] $(date '+%F %T')  routine=$ROUTINE  exit=$EXIT_CODE  level=$LEVEL  notify=$SHOULD_NOTIFY"
+} >> "$ROUTINE_DIR/logs/notify.log"
+
+[[ "$SHOULD_NOTIFY" == "0" ]] && exit 0
+
+# ── Build subject + body ───────────────────────────────────────
+LOG_TAIL=$(tail -80 "$LOG_PATH")
+
+case "$ROUTINE" in
+  daily)
+    if [[ "$LEVEL" == "success" ]]; then
+      # Extract slug + title lines from Claude's report for a sharper subject
+      POSTS_COUNT=$(grep -cE "^- Slug:" "$LOG_PATH" 2>/dev/null || echo 0)
+      SUBJECT="✓ Insigtrade daily — ${POSTS_COUNT} post$([[ "$POSTS_COUNT" == "1" ]] || echo s) published"
+    else
+      SUBJECT="✗ Insigtrade daily FAILED (exit $EXIT_CODE)"
+    fi
+    ;;
+  weekly)
+    SUBJECT="$([[ "$LEVEL" == "success" ]] && echo "✓ Insigtrade weekly research — queue topped up" || echo "✗ Insigtrade weekly FAILED (exit $EXIT_CODE)")"
+    ;;
+  monthly)
+    SUBJECT="$([[ "$LEVEL" == "success" ]] && echo "✓ Insigtrade monthly audit — report ready" || echo "✗ Insigtrade monthly FAILED (exit $EXIT_CODE)")"
+    ;;
+  *)
+    SUBJECT="$([[ "$LEVEL" == "success" ]] && echo "✓" || echo "✗") Insigtrade ${ROUTINE} (exit $EXIT_CODE)"
+    ;;
+esac
+
+BODY="$(cat <<EOF
+Routine: $ROUTINE
+Outcome: $LEVEL  (exit code $EXIT_CODE)
+Time:    $(date '+%F %T %Z')
+Host:    $(hostname -s)
+Log:     $LOG_PATH
+
+────────────────────────  Run report  ────────────────────────
+$LOG_TAIL
+──────────────────────────────────────────────────────────────
+
+If this is a failure, check:
+  ~/insigtrade-routines/logs/${ROUTINE}.launchd.err.log
+  ~/insigtrade-routines/logs/notify.log
+Common causes:
+  - Claude CLI auth expired   → run: ~/insigtrade-routines/claude-wrapper.sh setup-token
+  - Network blip              → re-run: ~/insigtrade-routines/runner.sh ${ROUTINE}
+  - API endpoint 5xx          → check vercel.com deployment status
+
+Manage routines:           launchctl list | grep insigtrade
+Status snapshot:           ~/insigtrade-routines/status.sh
+EOF
+)"
+
+# ── Tier 1: macOS notification (always) ────────────────────────
+ICON="🟢"
+[[ "$LEVEL" == "failure" ]] && ICON="🔴"
+if command -v osascript >/dev/null 2>&1; then
+  osascript -e "display notification \"${SUBJECT//\"/\\\"}\" with title \"Insigtrade\"" 2>/dev/null || true
+fi
+
+# ── Tier 2: Email via Resend ───────────────────────────────────
+TO_ADDR="${NOTIFY_EMAIL:-jaypatel1833@gmail.com}"
+FROM_ADDR="${NOTIFY_FROM:-onboarding@resend.dev}"
+
+if [[ -z "${RESEND_API_KEY:-}" ]]; then
+  echo "[notify] RESEND_API_KEY not set — email skipped. (See README to enable.)" \
+    >> "$ROUTINE_DIR/logs/notify.log"
+  exit 0
+fi
+
+# Payload — text only (HTML escape headaches not worth it)
+PAYLOAD=$(jq -n \
+  --arg from "$FROM_ADDR" \
+  --arg to "$TO_ADDR" \
+  --arg subject "$SUBJECT" \
+  --arg body "$BODY" \
+  '{from: $from, to: [$to], subject: $subject, text: $body}')
+
+HTTP=$(curl -s -o "$ROUTINE_DIR/logs/notify.last.json" -w "%{http_code}" \
+  -X POST "https://api.resend.com/emails" \
+  -H "Authorization: Bearer ${RESEND_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "$PAYLOAD")
+
+if [[ "$HTTP" =~ ^2 ]]; then
+  echo "[notify] email sent → $TO_ADDR (HTTP $HTTP)" >> "$ROUTINE_DIR/logs/notify.log"
+else
+  echo "[notify] email FAILED HTTP $HTTP — see notify.last.json" >> "$ROUTINE_DIR/logs/notify.log"
+fi
