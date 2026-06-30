@@ -118,7 +118,13 @@ export function BlockRenderer({
 
     case "key-takeaways":
       return (
-        <div className="my-8 p-6 bg-primary-light rounded-xl border border-primary/20">
+        // data-speakable: schema.org SpeakableSpecification references this
+        // selector so voice assistants (Cortana, Alexa) read the takeaways
+        // aloud. Also "speakable-takeaways" CSS class for stable targeting.
+        <div
+          className="speakable-takeaways my-8 p-6 bg-primary-light rounded-xl border border-primary/20"
+          data-speakable="true"
+        >
           <p className="text-sm font-bold text-navy uppercase tracking-wide mb-3">
             Key Takeaways
           </p>
@@ -135,7 +141,12 @@ export function BlockRenderer({
 
     case "tldr":
       return (
-        <div className="my-8 p-6 bg-surface rounded-xl border-l-4 border-accent">
+        // Speakable target: this is the 1-sentence answer voice assistants
+        // and LLMs cite most often.
+        <div
+          className="speakable-summary my-8 p-6 bg-surface rounded-xl border-l-4 border-accent"
+          data-speakable="true"
+        >
           <p className="text-xs font-bold text-accent uppercase tracking-wide mb-2">
             TL;DR
           </p>

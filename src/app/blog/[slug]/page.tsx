@@ -63,10 +63,13 @@ export default async function BlogPostPage({ params }: Props) {
       : null;
 
   // Orchestrated schema build (handles overrides, HowTo, VideoObject, FAQ, Review, etc.)
+  // `tools` is passed so the AEO/GEO `mentions` field can detect entities the
+  // article references (TradingView, ChatGPT, TradeZella, etc.).
   const schemas = buildPostSchemas({
     post,
     author,
     tool: reviewTool,
+    tools,
     category: category ? { slug: category.slug, name: category.name } : null,
     cfg: schemaCfg,
   });

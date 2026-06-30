@@ -91,7 +91,9 @@ export function breadcrumbSchema(items: { name: string; href: string }[]) {
 export function blogPostingSchema(
   post: Post,
   author?: Author | null,
-  cfg?: SchemaConfig
+  cfg?: SchemaConfig,
+  category?: { slug: string; name: string } | null,
+  tools?: Tool[]
 ) {
   if (!post.title) return null;
   const ov = post.schemaOverrides?.blogPosting;
@@ -107,6 +109,15 @@ export function blogPostingSchema(
     post.featuredImage ??
     absoluteUrl(`/blog/${post.slug}/opengraph-image`);
 
+  // Word count + plain-text summary derived from blocks.
+  // LLMs use these to size-up the page before deciding to cite.
+  const wordCount = countWords(post.blocks ?? []);
+  const articleBody = extractArticleBody(post.blocks ?? []);
+
+  // Entity tags ("mentions") help LLMs + AI search understand what real
+  // products/services the article discusses. about = the broader topic.
+  const mentions = collectMentions(post, tools);
+
   return clean({
     "@context": "https://schema.org",
     "@type":
@@ -120,26 +131,23 @@ export function blogPostingSchema(
     image: absoluteUrl(imageUrl),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
-    author: author
-      ? {
-          "@type": "Person",
-          name: author.name,
-          url: author.slug ? absoluteUrl(`/author/${author.slug}`) : absoluteUrl("/about"),
-        }
-      : cfg?.defaultAuthor
-      ? {
-          "@type": "Person",
-          name: cfg.defaultAuthor.name,
-          url: cfg.defaultAuthor.url ?? absoluteUrl("/about"),
-        }
+    inLanguage: cfg?.website?.inLanguage ?? "en-US",
+    wordCount: wordCount || undefined,
+    articleBody: articleBody || undefined,
+    articleSection: category?.name ?? post.categorySlug,
+    // about = the broad topic (cluster); mentions = entities cited within
+    about: category
+      ? { "@type": "Thing", name: category.name, url: absoluteUrl(`/category/${category.slug}`) }
       : undefined,
-    publisher: {
-      "@type": "Organization",
-      name: cfg?.organization?.name ?? site.organization.name,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl(cfg?.organization?.logo ?? "/logo.png"),
-      },
+    mentions: mentions.length ? mentions : undefined,
+    author: buildAuthorEntity(post, author, cfg),
+    publisher: buildPublisherEntity(cfg),
+    // Speakable: lets Cortana / Alexa / future voice surfaces read the
+    // TL;DR + key-takeaways aloud. The CSS selectors match data-speakable
+    // attributes the BlockRenderer emits.
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".speakable-summary", ".speakable-takeaways"],
     },
     mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
     keywords:
@@ -149,6 +157,195 @@ export function blogPostingSchema(
         ...(post.strategy?.secondaryKeywords ?? []),
       ].join(", "),
   });
+}
+
+// ──────────────────────────────────────────────────────────
+// Helpers that build the deeper entity blocks
+// ──────────────────────────────────────────────────────────
+
+const CLUSTER_EXPERTISE: Record<string, string[]> = {
+  "ai-for-traders": ["AI trading tools", "ChatGPT for stock research", "Perplexity finance workflows"],
+  "trading-automation": ["No-code trading automation", "TradingView webhooks", "Make.com workflows"],
+  "trader-productivity": ["Trade journaling", "Notion templates for traders", "Trading routines"],
+  "market-research": ["Stock screeners", "Earnings prep", "Sentiment analysis"],
+  "wealth-systems": ["AI for solopreneurs", "Side-hustle automation", "Import-export intelligence"],
+};
+
+function buildAuthorEntity(
+  post: Post,
+  author: Author | null | undefined,
+  cfg: SchemaConfig | undefined
+): Json {
+  const cluster = post.categorySlug ?? "";
+  const knowsAbout = CLUSTER_EXPERTISE[cluster] ?? [
+    "AI tools for traders",
+    "Trading automation",
+    "Quantitative finance workflows",
+  ];
+
+  if (author) {
+    return {
+      "@type": "Person",
+      name: author.name,
+      url: author.slug ? absoluteUrl(`/author/${author.slug}`) : absoluteUrl("/about"),
+      jobTitle: author.role,
+      description: author.bio,
+      image: author.avatar ? absoluteUrl(author.avatar) : undefined,
+      sameAs: [
+        author.twitter ? `https://twitter.com/${author.twitter.replace(/^@/, "")}` : undefined,
+        author.linkedin ? `https://www.linkedin.com/in/${author.linkedin}` : undefined,
+      ].filter(Boolean),
+      knowsAbout,
+      worksFor: {
+        "@type": "Organization",
+        name: cfg?.organization?.name ?? site.organization.name,
+        url: site.url,
+      },
+    };
+  }
+
+  return {
+    "@type": "Person",
+    name: cfg?.defaultAuthor?.name ?? site.organization.founder,
+    url: cfg?.defaultAuthor?.url ?? absoluteUrl("/about"),
+    knowsAbout,
+    worksFor: {
+      "@type": "Organization",
+      name: cfg?.organization?.name ?? site.organization.name,
+      url: site.url,
+    },
+    sameAs: cfg?.defaultAuthor?.sameAs,
+  };
+}
+
+function buildPublisherEntity(cfg: SchemaConfig | undefined): Json {
+  return {
+    "@type": "Organization",
+    name: cfg?.organization?.name ?? site.organization.name,
+    legalName: cfg?.organization?.legalName ?? site.organization.legalName,
+    url: site.url,
+    logo: {
+      "@type": "ImageObject",
+      url: absoluteUrl(cfg?.organization?.logo ?? "/logo.png"),
+    },
+    sameAs: cfg?.organization?.sameAs ?? site.organization.sameAs,
+    knowsAbout: [
+      "AI tools for traders",
+      "No-code trading automation",
+      "Stock screeners and market research",
+      "Trader productivity systems",
+      "Trading journals",
+    ],
+    audience: {
+      "@type": "Audience",
+      audienceType:
+        "Beginner-to-intermediate retail traders, AI-curious finance professionals, and solopreneurs",
+    },
+  };
+}
+
+/**
+ * Collect entities the article mentions, so LLMs and AI search engines
+ * can understand topical scope. Sources:
+ *   - the linked tool (for tool-review posts) → SoftwareApplication
+ *   - any other Tool whose `name` appears in the article text
+ *   - common product mentions detected in prose (TradingView, Notion, etc.)
+ */
+function collectMentions(post: Post, tools?: Tool[]): Json[] {
+  const text = extractArticleBody(post.blocks ?? []).toLowerCase();
+  const out: Json[] = [];
+
+  if (Array.isArray(tools)) {
+    for (const t of tools) {
+      if (!t?.name) continue;
+      if (text.includes(t.name.toLowerCase())) {
+        out.push({
+          "@type": "SoftwareApplication",
+          name: t.name,
+          applicationCategory: t.category,
+          url: t.website || undefined,
+        });
+      }
+    }
+  }
+
+  // Hard-coded list of widely-cited products so we tag mentions even when
+  // they aren't in the tools table. These help GEO — LLMs recognize the
+  // entity and link the citation back to the article.
+  const wellKnownProducts: { name: string; category?: string; url?: string }[] = [
+    { name: "TradingView", category: "FinanceApplication", url: "https://www.tradingview.com" },
+    { name: "ChatGPT", category: "AIAssistant", url: "https://openai.com/chatgpt" },
+    { name: "Claude", category: "AIAssistant", url: "https://claude.ai" },
+    { name: "Perplexity", category: "AIAssistant", url: "https://www.perplexity.ai" },
+    { name: "Notion", category: "ProductivityApplication", url: "https://www.notion.so" },
+    { name: "Make.com", category: "WorkflowAutomation", url: "https://www.make.com" },
+    { name: "Zapier", category: "WorkflowAutomation", url: "https://zapier.com" },
+    { name: "TradeZella", category: "FinanceApplication", url: "https://tradezella.com" },
+    { name: "Tradervue", category: "FinanceApplication", url: "https://www.tradervue.com" },
+    { name: "Discord", category: "CommunicationApplication", url: "https://discord.com" },
+  ];
+  for (const p of wellKnownProducts) {
+    if (text.includes(p.name.toLowerCase()) && !out.some((m) => (m as { name?: string }).name === p.name)) {
+      out.push({
+        "@type": "SoftwareApplication",
+        name: p.name,
+        applicationCategory: p.category,
+        url: p.url,
+      });
+    }
+  }
+
+  return out;
+}
+
+/** Total word count across paragraph + heading + list block text. */
+function countWords(blocks: Block[]): number {
+  let n = 0;
+  const add = (s: unknown) => {
+    if (typeof s !== "string") return;
+    n += s.trim().split(/\s+/).filter(Boolean).length;
+  };
+  for (const b of blocks) {
+    const block = b as Record<string, unknown>;
+    add(block.text);
+    if (Array.isArray(block.items))
+      for (const it of block.items) add(typeof it === "string" ? it : "");
+    if (Array.isArray(block.steps))
+      for (const s of block.steps) {
+        const step = s as Record<string, unknown>;
+        add(step.title);
+        add(step.body);
+        add(step.text);
+      }
+    if (Array.isArray(block.pros))
+      for (const it of block.pros) add(typeof it === "string" ? it : "");
+    if (Array.isArray(block.cons))
+      for (const it of block.cons) add(typeof it === "string" ? it : "");
+    if (Array.isArray(block.rows))
+      for (const row of block.rows)
+        if (Array.isArray(row)) for (const cell of row) add(typeof cell === "string" ? cell : "");
+  }
+  return n;
+}
+
+/**
+ * Plain-text article body — first N words of paragraph + tldr content.
+ * Used for schema.org `articleBody` so LLM crawlers can read a clean
+ * extract without parsing the HTML.
+ */
+function extractArticleBody(blocks: Block[], maxWords = 220): string {
+  const chunks: string[] = [];
+  for (const b of blocks) {
+    if ((b as { type: string }).type === "tldr" && (b as { text: string }).text) {
+      chunks.push((b as { text: string }).text);
+    }
+    if ((b as { type: string }).type === "paragraph" && (b as { text: string }).text) {
+      chunks.push((b as { text: string }).text);
+    }
+  }
+  const joined = chunks.join(" ").replace(/\s+/g, " ").trim();
+  const words = joined.split(" ");
+  return words.length > maxWords ? words.slice(0, maxWords).join(" ") + "…" : joined;
 }
 
 // ──────────────────────────────────────────────────────────
@@ -319,12 +516,15 @@ export function buildPostSchemas({
   post,
   author,
   tool,
+  tools,
   category,
   cfg,
 }: {
   post: Post;
   author?: Author | null;
   tool?: Tool | null;
+  /** Full tools list — used to detect mentions for AEO/GEO entity tagging. */
+  tools?: Tool[];
   category?: { slug: string; name: string } | null;
   cfg?: SchemaConfig;
 }): unknown[] {
@@ -342,9 +542,9 @@ export function buildPostSchemas({
     if (bc) out.push(bc);
   }
 
-  // BlogPosting / Review
+  // BlogPosting / Review (now passes category + tools for mentions/about)
   if (ov.blogPosting !== false) {
-    const bp = blogPostingSchema(post, author, cfg);
+    const bp = blogPostingSchema(post, author, cfg, category, tools);
     if (bp) out.push(bp);
   }
 
