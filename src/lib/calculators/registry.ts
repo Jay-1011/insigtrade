@@ -6,11 +6,12 @@
 
 import type { CalculatorConfig } from "./types";
 import { positionSizeCalculator } from "./position-size";
+import { kellyCriterionCalculator } from "./kelly-criterion";
 
 export const calculators: CalculatorConfig[] = [
   positionSizeCalculator,
+  kellyCriterionCalculator,
   // Coming next (data-driven priority order):
-  //   kelly-criterion-calculator        — 1,293 vol, KD 55, TP 1,600
   //   forex-position-size-calculator    — 579 vol, KD 56, TP 9,800
   //   futures-position-size-calculator  — 225 vol, KD 38, TP 3,500
   //   trading-risk-calculator           — 181 vol, KD 58, TP 9,900
